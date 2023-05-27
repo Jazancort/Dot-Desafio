@@ -1,0 +1,134 @@
+{
+  "workbench.colorTheme": "Dracula",
+  "terminal.integrated.shell.osx": "/bin/zsh",
+
+  "terminal.integrated.fontSize": 14,
+  "editor.linkedEditing": true,
+  "auto-rename-tag.activationOnLanguage": ["*"],
+  "files.associations": { "*html": "html" },
+
+  // For which languages indent-rainbow should be activated (if empty it means all).
+  "indentRainbow.includedLanguages": [], // for example ["nim", "nims", "python"]
+
+  // For which languages indent-rainbow should be deactivated (if empty it means none).
+  "indentRainbow.excludedLanguages": ["plaintext"],
+
+  // The delay in ms until the editor gets updated.
+  "indentRainbow.updateDelay": 100, // 10 makes it super fast but may cost more resources
+
+  "indentRainbow.colors": [
+    "rgba(255,255,64,0.07)",
+    "rgba(127,255,127,0.07)",
+    "rgba(255,127,255,0.07)",
+    "rgba(79,236,236,0.07)"
+  ],
+
+  "indentRainbow.errorColor": "rgba(128,32,32,0.6)",
+
+  "indentRainbow.tabmixColor": "rgba(128,32,96,0.6)",
+
+  "indentRainbow.ignoreLinePatterns": [
+    "/[ \t]* []/g", // lines begining with <whitespace><space>
+    "/[ \t]+[/]{2}/g" // lines begininning with <whitespace>//
+  ],
+
+  "indentRainbow.ignoreErrorLanguages": ["markdown", "haskell"],
+
+  "indentRainbow.colorOnWhiteSpaceOnly": true, // false is the default
+
+  "auto-close-tag.enableAutoCloseTag": true,
+  "auto-close-tag.enableAutoCloseSelfClosingTag": true,
+  "auto-close-tag.activationOnLanguage": [
+    "xml",
+    "php",
+    "blade",
+    "ejs",
+    "jinja",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "plaintext",
+    "markdown",
+    "vue",
+    "liquid",
+    "erb",
+    "lang-cfml",
+    "cfml",
+    "HTML (Eex)"
+  ],
+
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.startupEditor": "newUntitledFile",
+
+  "editor.tabSize": 2,
+  "editor.fontSize": 17,
+  "editor.lineHeight": 24,
+  "editor.fontLigatures": false,
+  "emmet.includeLanguages": {
+    "vue-html": "html"
+  },
+
+  "vetur.format.defaultFormatter.js": "vscode-typescript",
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "javascript.format.insertSpaceAfterConstructor": true,
+  "javascript.preferences.quoteStyle": "single",
+  "html.format.contentUnformatted": "pre,code,textarea",
+  "html.format.wrapAttributes": "preserve",
+  "html.format.wrapLineLength": 120,
+
+  "explorer.compactFolders": false,
+  "editor.renderLineHighlight": "gutter",
+  "workbench.editor.labelFormat": "short",
+  "extensions.ignoreRecommendations": true,
+
+  "javascript.updateImportsOnFileMove.enabled": "never",
+
+  "breadcrumbs.enabled": true,
+  "editor.parameterHints.enabled": false,
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+
+  "editor.rulers": [80, 120],
+  "java.home": "C:\\Program Files\\Java\\jdk-16.0.1",
+  "java.help.firstView": "gettingStarted",
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "Command Prompt": {
+      "path": "C:\\Windows\\System32\\cmd.exe"
+    },
+    "Git Bash": {
+      "source": "Git Bash"
+    },
+    "C:\\Windows\\System32\\wsl.exe (migrated)": {
+      "path": "C:\\Windows\\System32\\wsl.exe",
+      "args": []
+    }
+  },
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.semi": false,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "terminal.integrated.tabs.enabled": true,
+  "python.defaultInterpreterPath": "C:\\Users\\julio\\AppData\\Local\\Programs\\Python\\Python310\\python.exe",
+  "sync.gist": "7a6d810621bd05df969dc68e6499bedf",
+  "git.mergeEditor": false,
+  "terminal.integrated.env.windows": {},
+  "git.confirmSync": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true // this one will fix it on save for you
+  }
+}
