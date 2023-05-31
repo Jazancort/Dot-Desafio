@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import MovieCard from '../components/MovieCard.vue'
+import MovieCard from '../components/list/MovieCard.vue'
 export default {
   name: 'PageIndex',
   components: {
@@ -26,9 +26,9 @@ export default {
 
   &--card {
     width: 250px;
-    flex-basis: auto; /* Configuração para 4 elementos por fileira */
-    margin-bottom: 50px; /* Adiciona um espaçamento no final dos itens da fileira */
-    margin-top: -50px; /* Adiciona um espaçamento no final dos itens da fileira */
+    flex-basis: auto;
+    margin-bottom: 50px;
+    margin-top: -50px;
   }
 }
 </style>

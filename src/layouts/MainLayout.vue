@@ -5,15 +5,15 @@
       <q-toolbar class="header--content">
         <!-- IMAGEM DA LOGO -->
         <div class="header--logo">
-          <img style="height: 50px" src="dot+.png" />
+          <img src="dot+.png" class="header--logo-img" />
         </div>
 
         <div class="header--input">
           <q-input
             v-model="text"
             label="Pesquisar"
-            placeholder="Pesquisar"
             bg-color="white"
+            color="blue-grey-6"
             class="header--input__big"
             outlined
           >
@@ -69,6 +69,10 @@ export default {
   &--logo {
     margin-left: 40px;
     margin-right: -20px;
+
+    &-img {
+      height: 50px;
+    }
   }
 
   &--input {
