@@ -13,15 +13,30 @@
     <q-scroll-area class="fit">
       <div class="drawer">
         <div class="drawer-header">
-          <span class="drawer-header--title">Meus Favoritos</span>
+          <span class="drawer-header--title">Meus Carrinho</span>
           <span class="drawer-header--clear">Esvaziar</span>
         </div>
       </div>
 
       <div class="drawer-content">
         <div v-for="index in 5" :key="index">
-          <MovieInfo :hasCart="true" />
+          <MovieInfo gap="medium" :hasCart="false" />
         </div>
+      </div>
+
+      <div class="drawer-footer">
+        <div class="row drawer-footer-total">
+          <div class="col-8 drawer-footer-total--text">Total:</div>
+
+          <div class="col drawer-footer-total--price">R$ 19,98</div>
+        </div>
+
+        <q-btn
+          class="full-width drawer-footer-button"
+          label="Finalizar"
+          no-caps
+          @click="$router.push('/checkout')"
+        />
       </div>
     </q-scroll-area>
   </q-drawer>
@@ -31,14 +46,14 @@
 import MovieInfo from './MovieInfo'
 
 export default {
-  name: 'Favorites',
+  name: 'Cart',
 
   components: {
     MovieInfo
   },
 
   props: {
-    openFavDrawer: {
+    openCartDrawer: {
       type: Boolean,
       default: false
     }
@@ -51,7 +66,7 @@ export default {
   },
 
   watch: {
-    openFavDrawer() {
+    openCartDrawer() {
       this.drawerRight = !this.drawerRight
     }
   }
@@ -64,6 +79,41 @@ export default {
 
   &-content {
     margin: 0 8px 0 8px;
+  }
+
+  &-footer {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    margin-top: 20px;
+    padding: 8px;
+
+    &-total {
+      margin: 30px 0 0 5px;
+      font-weight: 500;
+      color: #4b5c6b;
+
+      &--text {
+        padding-top: 4px;
+        font-size: 22px;
+      }
+
+      &--price {
+        font-size: 26px;
+        text-align: end;
+        padding-right: 6px;
+      }
+    }
+
+    &-button {
+      margin-top: 20px;
+      height: 46px;
+      color: white;
+      background-color: #6558f5;
+      max-width: 100%;
+      font-size: 18px;
+    }
   }
 
   &-header {

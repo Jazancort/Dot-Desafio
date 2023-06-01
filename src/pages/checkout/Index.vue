@@ -1,10 +1,10 @@
 <template>
   <div class="checkout">
     <div class="checkout--content">
-      <div class="checkout--item">
+      <div class="checkout--item-form">
         <UserForm />
       </div>
-      <div class="checkout--item">
+      <div class="checkout--item-movies">
         <SelectedMovies />
       </div>
     </div>
@@ -39,9 +39,17 @@ export default {
   }
 
   &--item {
-    margin: 10px;
-    margin-right: 50px;
-    min-width: 500px;
+    &-form {
+      margin: 10px;
+      margin-right: 50px;
+      min-width: 600px;
+    }
+
+    &-movies {
+      margin: 10px;
+      margin-right: 50px;
+      min-width: 350px;
+    }
   }
 }
 
@@ -53,9 +61,17 @@ export default {
 
 @media (max-width: 720px) {
   .checkout--item {
-    margin-right: 10px;
-    min-width: auto;
-    flex-basis: 100%;
+    &-form {
+      margin: 10px;
+      min-width: auto;
+      flex-basis: 100%;
+    }
+
+    &-movies {
+      margin: 10px;
+      min-width: auto;
+      flex-basis: 100%;
+    }
   }
 }
 </style>

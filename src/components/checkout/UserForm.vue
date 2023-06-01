@@ -4,14 +4,14 @@
     <div class="checkout--form-title">Finalizar Compra</div>
 
     <div class="default-spacing">
-      <q-input v-model="name" color="blue-grey-6" label="Nome Completo" outlined />
+      <q-input v-model="nome" color="blue-grey-6" label="Nome Completo" outlined />
     </div>
 
     <!-- CPF E CELULAR -->
     <div class="row default-spacing">
       <div class="col">
         <q-input
-          v-model="name"
+          v-model="cpf"
           color="blue-grey-6"
           label="CPF"
           class="checkout--form-space"
@@ -20,20 +20,20 @@
       </div>
 
       <div class="col">
-        <q-input v-model="name" color="blue-grey-6" label="Celular" outlined />
+        <q-input v-model="celular" color="blue-grey-6" label="Celular" outlined />
       </div>
     </div>
 
     <!-- EMAIL -->
     <div class="default-spacing">
-      <q-input v-model="name" color="blue-grey-6" label="E-mail" outlined />
+      <q-input v-model="email" color="blue-grey-6" label="E-mail" outlined />
     </div>
 
     <!-- CEP/ENDEREÇO -->
     <div class="row default-spacing">
       <div class="col-4">
         <q-input
-          v-model="name"
+          v-model="cep"
           color="blue-grey-6"
           label="CEP"
           class="checkout--form-space"
@@ -42,7 +42,7 @@
       </div>
 
       <div class="col">
-        <q-input v-model="name" color="blue-grey-6" label="Endereço" outlined />
+        <q-input v-model="endereco" color="blue-grey-6" label="Endereço" outlined />
       </div>
     </div>
 
@@ -50,7 +50,7 @@
     <div class="row default-spacing">
       <div class="col-7">
         <q-input
-          v-model="name"
+          v-model="cidade"
           color="blue-grey-6"
           label="Cidade"
           class="checkout--form-space"
@@ -59,7 +59,7 @@
       </div>
 
       <div class="col">
-        <q-input v-model="name" color="blue-grey-6" label="Estado" outlined />
+        <q-input v-model="estado" color="blue-grey-6" label="Estado" outlined />
       </div>
     </div>
   </div>

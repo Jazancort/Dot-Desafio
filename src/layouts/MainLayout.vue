@@ -4,8 +4,9 @@
     <q-header class="header">
       <q-toolbar class="header--content">
         <!-- IMAGEM DA LOGO -->
-        <div class="header--logo">
-          <img src="dot+.png" class="header--logo-img" />
+        <div class="header--logo" @click="$router.push('/')">
+          <img v-if="$q.platform.is.mobile" src="dot+_small.png" class="header--logo-img" />
+          <img v-else src="dot+.png" class="header--logo-img" />
         </div>
 
         <div class="header--input">
@@ -24,18 +25,26 @@
         </div>
 
         <div class="header--buttons">
-          <q-btn icon="favorite" size="16px" dense flat @click="openDrawer = !openDrawer">
+          <q-btn icon="favorite" size="16px" dense flat @click="actionFavDrawer()">
             <q-badge class="header--buttons-badge" rounded floating>4</q-badge>
           </q-btn>
 
-          <q-btn icon="shopping_cart" size="16px" class="q-ml-lg" dense flat>
+          <q-btn
+            icon="shopping_cart"
+            size="14px"
+            class="q-ml-md"
+            dense
+            flat
+            @click="actionCartDrawer()"
+          >
             <q-badge class="header--buttons-badge" rounded floating>4</q-badge>
           </q-btn>
         </div>
       </q-toolbar>
     </q-header>
 
-    <Favorites :openDrawer="openDrawer" />
+    <Favorites :openFavDrawer="openFavDrawer" />
+    <Cart :openCartDrawer="openCartDrawer" />
 
     <q-page-container>
       <router-view />
@@ -45,16 +54,32 @@
 
 <script>
 import Favorites from '../components/drawer/Favorites.vue'
+import Cart from '../components/drawer/Cart.vue'
+
 export default {
   name: 'MainLayout',
   components: {
-    Favorites
+    Favorites,
+    Cart
   },
 
   data() {
     return {
       text: null,
-      openDrawer: false
+      openFavDrawer: false,
+      openCartDrawer: false
+    }
+  },
+
+  methods: {
+    actionFavDrawer() {
+      this.openFavDrawer = !this.openFavDrawer
+      this.openCartDrawer = false
+    },
+
+    actionCartDrawer() {
+      this.openCartDrawer = !this.openCartDrawer
+      this.openFavDrawer = false
     }
   }
 }
@@ -69,6 +94,7 @@ export default {
   justify-content: space-between;
 
   &--logo {
+    cursor: pointer;
     margin-left: 40px;
     margin-right: -20px;
 
@@ -105,16 +131,19 @@ export default {
 @media (max-width: 600px) {
   .header {
     &--logo {
-      margin-left: 20px;
-      margin-right: -10px;
+      margin-left: 0px;
+      margin-right: 10px;
     }
 
     &--input {
-      display: none;
+      max-width: 200px;
+      height: 20px;
     }
 
     &--buttons {
-      margin-right: 20px;
+      margin-right: 15px;
+      position: absolute;
+      right: 0;
     }
   }
 }

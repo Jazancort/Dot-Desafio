@@ -1,23 +1,9 @@
 <template>
   <div class="selected-movies">
-    <div v-if="hasTitle" class="row title">
-      <div class="col-3">Imagem</div>
-      <div class="col-4">Nome</div>
-      <div class="col-2">Qtd</div>
-      <div class="col-2">Preço</div>
-      <div class="col-1"></div>
-    </div>
+    <MovieInfoTitles gap="big" />
 
     <div v-for="index in itemCount" :key="index">
-      <div class="row content">
-        <div class="col-3">
-          <img src="exemplo.png" :height="imgHeight" class="header--logo-img" />
-        </div>
-        <div class="col-4 content--itens">Nome do filme</div>
-        <div class="col-2 content--itens">1</div>
-        <div class="col-2 content--itens">R$ 9,99</div>
-        <div class="col-1 content--itens"><q-icon name="delete" size="sm" /></div>
-      </div>
+      <MovieInfo gap="big" />
       <hr v-if="isLastItem(index) && hasLine" class="content--line" />
     </div>
 
@@ -32,8 +18,15 @@
 </template>
 
 <script>
+import MovieInfo from '../drawer/MovieInfo.vue'
+import MovieInfoTitles from '../drawer/MovieInfoTitles.vue'
 export default {
   name: 'SelectedMovies',
+
+  components: {
+    MovieInfo,
+    MovieInfoTitles
+  },
 
   props: {
     hasTitle: {
