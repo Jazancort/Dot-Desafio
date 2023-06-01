@@ -1,12 +1,10 @@
 <template>
   <div class="checkout">
-    <div class="checkout--title">Finalizar Compra</div>
-
-    <div class="row center">
-      <div class="col">
+    <div class="checkout--content">
+      <div class="checkout--item">
         <UserForm />
       </div>
-      <div class="col">
+      <div class="checkout--item">
         <SelectedMovies />
       </div>
     </div>
@@ -33,12 +31,31 @@ export default {
 
 <style lang="scss" scoped>
 .checkout {
-  margin: 30px 150px 0px 350px;
+  &--content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
 
-  &--title {
-    font-size: 28px;
-    color: #4b5c6b;
-    margin: 0 0 20px 0;
+  &--item {
+    margin: 10px;
+    margin-right: 50px;
+    min-width: 500px;
+  }
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 720px) {
+  .checkout--item {
+    margin-right: 10px;
+    min-width: auto;
+    flex-basis: 100%;
   }
 }
 </style>

@@ -24,7 +24,7 @@
         </div>
 
         <div class="header--buttons">
-          <q-btn icon="favorite" size="16px" dense flat>
+          <q-btn icon="favorite" size="16px" dense flat @click="openDrawer = !openDrawer">
             <q-badge class="header--buttons-badge" rounded floating>4</q-badge>
           </q-btn>
 
@@ -35,6 +35,8 @@
       </q-toolbar>
     </q-header>
 
+    <Favorites :openDrawer="openDrawer" />
+
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -42,23 +44,23 @@
 </template>
 
 <script>
+import Favorites from '../components/drawer/Favorites.vue'
 export default {
   name: 'MainLayout',
+  components: {
+    Favorites
+  },
+
   data() {
     return {
-      text: null
+      text: null,
+      openDrawer: false
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-::v-deep {
-  .q-badge--floating {
-    right: -6px;
-  }
-}
-
 .header {
   background-color: #d1efec;
   height: 70px;
@@ -83,7 +85,8 @@ export default {
     justify-content: center;
 
     &__big {
-      width: 500px;
+      width: 100%;
+      max-width: 500px;
       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Adicionando sombra */
     }
   }
@@ -95,6 +98,23 @@ export default {
       padding: 5px 5px 3px 5px;
       color: black;
       background-color: #fdf3d3;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    &--logo {
+      margin-left: 20px;
+      margin-right: -10px;
+    }
+
+    &--input {
+      display: none;
+    }
+
+    &--buttons {
+      margin-right: 20px;
     }
   }
 }

@@ -1,37 +1,67 @@
 <template>
   <div class="selected-movies">
-    <div class="row title">
+    <div v-if="hasTitle" class="row title">
       <div class="col-3">Imagem</div>
-      <div class="col-3">Nome</div>
+      <div class="col-4">Nome</div>
       <div class="col-2">Qtd</div>
       <div class="col-2">Preço</div>
-      <div class="col-2"></div>
+      <div class="col-1"></div>
     </div>
 
     <div v-for="index in itemCount" :key="index">
       <div class="row content">
-        <div class="col-3"><img src="exemplo.png" class="header--logo-img" /></div>
-        <div class="col-3 content--itens">Nome do filme</div>
+        <div class="col-3">
+          <img src="exemplo.png" :height="imgHeight" class="header--logo-img" />
+        </div>
+        <div class="col-4 content--itens">Nome do filme</div>
         <div class="col-2 content--itens">1</div>
         <div class="col-2 content--itens">R$ 9,99</div>
-        <div class="col-2 content--itens"><q-icon name="delete" size="sm" /></div>
+        <div class="col-1 content--itens"><q-icon name="delete" size="sm" /></div>
       </div>
-      <hr v-if="isLastItem(index)" class="content--line" />
+      <hr v-if="isLastItem(index) && hasLine" class="content--line" />
     </div>
 
-    <div class="row total">
+    <div v-if="hasTotal" class="row total">
       <div class="col-8 total--text">Total:</div>
 
       <div class="col total--price">R$ 19,98</div>
     </div>
 
-    <q-btn class="full-width button" no-caps label="Finalizar" />
+    <q-btn v-if="hasButton" class="full-width button" no-caps label="Finalizar" />
   </div>
 </template>
 
 <script>
 export default {
   name: 'SelectedMovies',
+
+  props: {
+    hasTitle: {
+      type: Boolean,
+      default: true
+    },
+
+    hasTotal: {
+      type: Boolean,
+      default: true
+    },
+
+    hasButton: {
+      type: Boolean,
+      default: true
+    },
+
+    hasLine: {
+      type: Boolean,
+      default: true
+    },
+
+    imgHeight: {
+      type: String,
+      default: '70px'
+    }
+  },
+
   data() {
     return {
       itemCount: 2 // Defina o número de vezes que o v-for deve ocorrer dinamicamente
@@ -65,6 +95,7 @@ export default {
 
     &--price {
       font-size: 26px;
+      text-align: end;
     }
   }
 
@@ -73,7 +104,7 @@ export default {
     height: 46px;
     color: white;
     background-color: #6558f5;
-    max-width: 90%;
+    max-width: 100%;
     font-size: 18px;
   }
 
@@ -85,11 +116,10 @@ export default {
       height: 2px;
       color: #9eadba;
       background-color: #9eadba;
-      margin-right: 12%;
     }
 
     &--itens {
-      margin-top: 6%;
+      margin-top: 5%;
 
       &-icon {
         height: 10px;

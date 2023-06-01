@@ -1,6 +1,8 @@
 <template>
   <div class="checkout--form">
     <!-- NOME COMPLETO -->
+    <div class="checkout--form-title">Finalizar Compra</div>
+
     <div class="default-spacing">
       <q-input v-model="name" color="blue-grey-6" label="Nome Completo" outlined />
     </div>
@@ -90,6 +92,12 @@ export default {
 
 .checkout--form {
   max-width: 600px;
+
+  &-title {
+    font-size: 28px;
+    color: #4b5c6b;
+    margin: 0 0 20px 0;
+  }
 
   &-space {
     margin-right: 20px;
