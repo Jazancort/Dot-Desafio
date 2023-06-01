@@ -24,11 +24,21 @@ export default {
   justify-content: center;
   gap: 50px;
 
+  @media (max-width: 600px) {
+    margin: 40px 40px 0 40px;
+  }
+
   &--card {
     width: 250px;
     flex-basis: auto;
     margin-bottom: 50px;
     margin-top: -50px;
+
+    @media (max-width: 600px) {
+      width: 100%;
+      margin-bottom: 0px;
+      margin-top: 0;
+    }
   }
 }
 </style>
