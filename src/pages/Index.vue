@@ -1,17 +1,48 @@
 <template>
   <div class="movie-list">
-    <div v-for="i in 8" :key="i" class="movie-list--card">
-      <MovieCard />
+    <div v-for="movie in movies" :key="movie.id" class="movie-list--card">
+      <MovieCard
+        :movies="movies"
+        :poster="movie.poster_path"
+        :title="movie.title"
+        :date="movie.release_date"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { throws } from 'assert'
 import MovieCard from '../components/list/MovieCard.vue'
 export default {
   name: 'PageIndex',
+
   components: {
     MovieCard
+  },
+
+  data() {
+    return {
+      movies: [] // Certifique-se de inicializar a propriedade 'movies' como um array vazio
+    }
+  },
+
+  created() {
+    this.fetchMovies()
+  },
+
+  methods: {
+    fetchMovies() {
+      this.$movie
+        .getPopularMovies()
+        .then((response) => {
+          console.log(response.data.results)
+          this.movies = response.data.results
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
   }
 }
 </script>

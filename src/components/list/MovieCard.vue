@@ -1,42 +1,59 @@
 <template>
-  <q-card class="movie-card">
-    <img
-      src="https://cdn.shopify.com/s/files/1/0057/3728/3618/products/108b520c55e3c9760f77a06110d6a73b_240x360_crop_center.progressive.jpg?v=1573652543"
-    />
+  <div>
+    <q-card class="movie-card">
+      <img :src="`https://image.tmdb.org/t/p/original${poster}`" class="movie-card--img" />
 
-    <div class="row col-auto movie-card--favorite">
-      <q-btn color="grey-7" round flat icon="favorite"></q-btn>
-    </div>
-
-    <div class="movie-card--date">
-      <div class="movie-card--date-text">7 de Janeiro, 2019</div>
-    </div>
-
-    <q-card-section>
-      <div class="movie-card--info">
-        <div class="name">Nome do filme</div>
-
-        <div class="gender">
-          <q-icon class="icon" size="sm" name="r_star" />
-          <span class="icon--text">7 </span>
-          <span class="gender">Gênero</span>
-        </div>
-
-        <div class="price">R$ 79,99</div>
+      <div class="row col-auto movie-card--favorite">
+        <q-btn color="grey-7" round flat icon="favorite"></q-btn>
       </div>
-    </q-card-section>
 
-    <q-separator />
+      <div class="movie-card--date">
+        <div class="movie-card--date-text">7 de Janeiro, 2019</div>
+      </div>
 
-    <q-card-actions>
-      <q-btn class="movie-card--button full-width" no-caps>Adicionar</q-btn>
-    </q-card-actions>
-  </q-card>
+      <q-card-section>
+        <div class="movie-card--info">
+          <div class="name">{{ title }}</div>
+
+          <div class="gender">
+            <q-icon class="icon" size="sm" name="r_star" />
+            <span class="icon--text">7 </span>
+            <span class="gender">Gênero</span>
+          </div>
+
+          <div class="price">R$ 79,99</div>
+        </div>
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-actions>
+        <q-btn class="movie-card--button full-width" no-caps>Adicionar</q-btn>
+      </q-card-actions>
+    </q-card>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'MovieCard'
+  name: 'MovieCard',
+
+  props: {
+    title: {
+      type: String,
+      default: ''
+    },
+
+    date: {
+      type: String,
+      default: ''
+    },
+
+    poster: {
+      type: String,
+      default: ''
+    }
+  }
 }
 </script>
 
@@ -57,6 +74,10 @@ export default {
     position: absolute; /* Adiciona posicionamento absoluto */
     top: 5px; /* Define a distância do topo */
     right: 5px; /* Define a distância da direita */
+  }
+
+  &--img {
+    max-height: 400px;
   }
 
   &--date {
