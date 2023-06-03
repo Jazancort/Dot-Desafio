@@ -51,8 +51,8 @@ export default {
           this.movies = this.movies.concat(response.data.results)
           this.loading = false
         })
-        .catch((error) => {
-          console.error(error)
+        .catch(() => {
+          this.$notifyError('Erro ao buscar filmes!')
         })
     },
 
@@ -62,13 +62,13 @@ export default {
         .then((response) => {
           this.genres = response.data.genres
         })
-        .catch((error) => {
-          console.error(error)
+        .catch(() => {
+          this.$notifyError('Erro ao buscar generos!')
         })
     },
 
     getMovieGenre(genreIds) {
-      const movieGenres = this.genres.filter((genre) => genreIds.includes(genre.id)).slice(0, 4) // Retorna apenas os 4 primeiros gêneros
+      const movieGenres = this.genres.filter((genre) => genreIds.includes(genre.id)).slice(0, 4)
 
       return movieGenres.map((genre) => genre.name).join(', ')
     },

@@ -11,16 +11,48 @@
 
         <div class="header--input">
           <q-input
+            ref="searchInput"
             v-model="text"
+            debounce="500"
             label="Pesquisar"
             bg-color="white"
             color="blue-grey-6"
             class="header--input__big"
             outlined
+            @input="handleSearchInput"
           >
             <template v-slot:append>
               <q-icon name="search" />
             </template>
+
+            <q-menu v-model="showOptions" fit no-focus>
+              <q-list v-if="searchOptions.length > 0" bordered dense separator class="header--list">
+                <q-infinite-scroll
+                  @load="loadMoreOptions"
+                  :offset="scrollOffset"
+                  :throttle="scrollThrottle"
+                  :disabled="isLoadingOptions"
+                >
+                  <q-item v-for="option in displayedOptions" :key="option.id" clickable>
+                    <q-item-section avatar>
+                      <q-avatar square>
+                        <img :src="option.poster" alt="Movie Poster" />
+                      </q-avatar>
+                    </q-item-section>
+
+                    <q-item-section>
+                      <q-item-label>{{ option.title }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item v-if="isLoadingOptions">
+                    <q-item-section>
+                      <q-spinner-hourglass color="primary" size="24px" />
+                    </q-item-section>
+                  </q-item>
+                </q-infinite-scroll>
+              </q-list>
+            </q-menu>
           </q-input>
         </div>
 
@@ -67,7 +99,13 @@ export default {
     return {
       text: null,
       openFavDrawer: false,
-      openCartDrawer: false
+      openCartDrawer: false,
+      showOptions: false,
+      searchOptions: [],
+      displayedOptions: [],
+      isLoadingOptions: false,
+      scrollOffset: 200,
+      scrollThrottle: 300
     }
   },
 
@@ -80,6 +118,39 @@ export default {
     actionCartDrawer() {
       this.openCartDrawer = !this.openCartDrawer
       this.openFavDrawer = false
+    },
+
+    handleSearchInput() {
+      if (this.text) {
+        this.$movie
+          .searchMovie({ page: 1, query: this.text })
+          .then((response) => {
+            this.searchOptions = response.data.results.map((movie) => ({
+              id: movie.id,
+              title: movie.title,
+              poster: `https://image.tmdb.org/t/p/original${movie.poster_path}`
+            }))
+            this.displayedOptions = this.searchOptions.slice(0, 5) // Mostra apenas os primeiros 5 resultados
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      } else {
+        this.searchOptions = []
+        this.displayedOptions = []
+      }
+    },
+
+    loadMoreOptions() {
+      const startIndex = this.displayedOptions.length
+      const endIndex = startIndex + 5
+      if (endIndex <= this.searchOptions.length) {
+        this.isLoadingOptions = true
+        setTimeout(() => {
+          this.displayedOptions = this.searchOptions.slice(0, endIndex)
+          this.isLoadingOptions = false
+        }, 500) // Simulação de uma carga assíncrona para carregar mais resultados. Ajuste conforme necessário.
+      }
     }
   }
 }
@@ -103,12 +174,31 @@ export default {
     }
   }
 
+  &--list {
+    min-width: 100px;
+  }
+
   &--input {
     background-color: #d1efec;
     flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    &__options {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    &__wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    &__no-options {
+      padding: 10px;
+      text-align: center;
+    }
 
     &__big {
       width: 100%;
@@ -133,6 +223,10 @@ export default {
     &--logo {
       margin-left: 0px;
       margin-right: 10px;
+    }
+
+    &--list {
+      max-width: 200px;
     }
 
     &--input {
