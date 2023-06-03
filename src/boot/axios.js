@@ -12,6 +12,11 @@ const services = {
 
 axiosInstance.interceptors.request.use((config) => {
   config.headers['Authorization'] = `Bearer ${process.env.VUE_APP_API_KEY}`
+  config.params = {
+    ...config.params,
+    language: 'pt-BR'
+  }
+  config.headers['accept'] = 'application/json'
   return config
 })
 

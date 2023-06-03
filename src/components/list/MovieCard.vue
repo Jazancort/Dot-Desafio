@@ -1,10 +1,17 @@
 <template>
-  <div>
+  <div id="movie-card">
     <q-card class="movie-card">
       <img :src="`https://image.tmdb.org/t/p/original${poster}`" class="movie-card--img" />
 
       <div class="row col-auto movie-card--favorite">
-        <q-btn color="grey-7" round flat icon="favorite"></q-btn>
+        <q-btn
+          :color="isFavorite === true ? 'red-7' : 'grey-7'"
+          :ripple="false"
+          icon="favorite"
+          round
+          flat
+          @click="toggleFavorite"
+        ></q-btn>
       </div>
 
       <div class="movie-card--date">
@@ -17,8 +24,8 @@
 
           <div class="gender">
             <q-icon class="icon" size="sm" name="r_star" />
-            <span class="icon--text">7 </span>
-            <span class="gender">Gênero</span>
+            <span class="icon--text">{{ votes }} </span>
+            <div class="gender">{{ genres }}</div>
           </div>
 
           <div class="price">R$ 79,99</div>
@@ -52,6 +59,28 @@ export default {
     poster: {
       type: String,
       default: ''
+    },
+
+    genres: {
+      type: String,
+      default: ''
+    },
+
+    votes: {
+      type: Number,
+      default: null
+    }
+  },
+
+  data() {
+    return {
+      isFavorite: false
+    }
+  },
+
+  methods: {
+    toggleFavorite() {
+      this.isFavorite = !this.isFavorite
     }
   }
 }
@@ -67,29 +96,33 @@ export default {
   }
   .q-card__section--vert {
     padding: 4px;
+    /* max-height: 85px; */
+    min-height: 90px;
   }
 }
+
 .movie-card {
   &--favorite {
-    position: absolute; /* Adiciona posicionamento absoluto */
-    top: 5px; /* Define a distância do topo */
-    right: 5px; /* Define a distância da direita */
+    position: absolute;
+    top: 5px;
+    right: 5px;
   }
 
   &--img {
-    max-height: 400px;
+    max-height: 500px;
   }
 
   &--date {
     color: white;
-    position: absolute; /* Adiciona posicionamento absoluto */
-    text-align: center;
-    top: 70%; /* Define a distância do topo */
-    right: 20%;
+    position: absolute;
+    top: 74%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
     &-text {
       font-size: 16px;
       font-weight: 500;
+      text-shadow: 2px 2px 0 black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
     }
   }
 
@@ -113,7 +146,7 @@ export default {
     }
 
     .gender {
-      margin-left: 20px;
+      margin-bottom: 5px;
     }
   }
 

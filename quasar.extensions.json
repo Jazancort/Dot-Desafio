@@ -1,0 +1,6 @@
+{
+  "@quasar/dotenv": {
+    "env_development": ".env",
+    "env_production": ".env"
+  }
+}

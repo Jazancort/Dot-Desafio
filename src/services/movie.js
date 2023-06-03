@@ -1,3 +1,5 @@
 export default ($axios) => ({
-  getPopularMovies: () => $axios.get('/movie/popular')
+  getPopularMovies: (params) => $axios.get(`/discover/movie?page`, { params }),
+
+  getMovieGenres: () => $axios.get('/genre/movie/list')
 })

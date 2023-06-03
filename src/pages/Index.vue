@@ -1,19 +1,21 @@
 <template>
-  <div class="movie-list">
+  <div class="movie-list" ref="movieList">
     <div v-for="movie in movies" :key="movie.id" class="movie-list--card">
       <MovieCard
         :movies="movies"
         :poster="movie.poster_path"
         :title="movie.title"
         :date="movie.release_date"
+        :genres="getMovieGenre(movie.genre_ids)"
+        :votes="movie.vote_average"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { throws } from 'assert'
 import MovieCard from '../components/list/MovieCard.vue'
+
 export default {
   name: 'PageIndex',
 
@@ -23,25 +25,64 @@ export default {
 
   data() {
     return {
-      movies: [] // Certifique-se de inicializar a propriedade 'movies' como um array vazio
+      movies: [],
+      genres: [],
+      currentPage: 1,
+      loading: false,
+      offset: 200 // Define o offset desejado, em pixels
     }
   },
 
   created() {
     this.fetchMovies()
+    this.fetchGenres()
+    window.addEventListener('scroll', this.handleScroll)
+  },
+
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll)
   },
 
   methods: {
     fetchMovies() {
       this.$movie
-        .getPopularMovies()
+        .getPopularMovies({ page: this.currentPage })
         .then((response) => {
-          console.log(response.data.results)
-          this.movies = response.data.results
+          this.movies = this.movies.concat(response.data.results)
+          this.loading = false
         })
         .catch((error) => {
           console.error(error)
         })
+    },
+
+    fetchGenres() {
+      this.$movie
+        .getMovieGenres()
+        .then((response) => {
+          this.genres = response.data.genres
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    },
+
+    getMovieGenre(genreIds) {
+      const movieGenres = this.genres.filter((genre) => genreIds.includes(genre.id)).slice(0, 4) // Retorna apenas os 4 primeiros gêneros
+
+      return movieGenres.map((genre) => genre.name).join(', ')
+    },
+
+    handleScroll() {
+      const movieList = this.$refs.movieList
+      const scrollPosition = window.pageYOffset + window.innerHeight
+      const movieListHeight = movieList.offsetHeight
+
+      if (scrollPosition >= movieListHeight - window.innerHeight - this.offset && !this.loading) {
+        this.loading = true
+        this.currentPage++
+        this.fetchMovies()
+      }
     }
   }
 }
@@ -56,19 +97,26 @@ export default {
   gap: 50px;
 
   @media (max-width: 600px) {
-    margin: 40px 40px 0 40px;
+    margin: 40px 20px 0 20px;
   }
 
   &--card {
-    width: 250px;
+    max-height: 500px;
+    width: 350px;
     flex-basis: auto;
-    margin-bottom: 50px;
+    margin-bottom: 200px;
     margin-top: -50px;
 
     @media (max-width: 600px) {
       width: 100%;
-      margin-bottom: 0px;
+      margin-bottom: 150px;
       margin-top: 0;
+    }
+
+    &:last-child {
+      @media (max-width: 600px) {
+        margin-bottom: 150px;
+      }
     }
   }
 }
