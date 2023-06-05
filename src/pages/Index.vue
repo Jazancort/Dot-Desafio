@@ -8,6 +8,7 @@
         :date="movie.release_date"
         :genres="getMovieGenre(movie.genre_ids)"
         :votes="movie.vote_average"
+        :id="movie.id"
       />
     </div>
   </div>

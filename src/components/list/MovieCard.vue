@@ -5,7 +5,7 @@
 
       <div class="row col-auto movie-card--favorite">
         <q-btn
-          :color="isFavorite === true ? 'red-7' : 'grey-7'"
+          :color="isFavorite ? 'red-7' : 'grey-7'"
           :ripple="false"
           icon="favorite"
           round
@@ -69,6 +69,11 @@ export default {
     votes: {
       type: Number,
       default: null
+    },
+
+    id: {
+      type: Number,
+      default: null
     }
   },
 
@@ -78,9 +83,32 @@ export default {
     }
   },
 
+  created() {
+    this.checkFavoriteStatus()
+  },
+
   methods: {
     toggleFavorite() {
       this.isFavorite = !this.isFavorite
+
+      // Obtém os filmes favoritos do localStorage
+      let favorites = JSON.parse(localStorage.getItem('favorites')) || []
+
+      if (this.isFavorite) {
+        // Adiciona o filme aos favoritos
+        favorites.push({ id: this.id, title: this.title, poster: this.poster, genres: this.genres })
+      } else {
+        // Remove o filme dos favoritos
+        favorites = favorites.filter((favorite) => favorite.id !== this.id)
+      }
+
+      // Salva o array atualizado de favoritos no localStorage
+      localStorage.setItem('favorites', JSON.stringify(favorites))
+    },
+
+    checkFavoriteStatus() {
+      let favorites = JSON.parse(localStorage.getItem('favorites')) || []
+      this.isFavorite = favorites.some((favorite) => favorite.id === this.id)
     }
   }
 }

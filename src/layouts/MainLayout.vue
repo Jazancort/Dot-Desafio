@@ -109,7 +109,32 @@ export default {
     }
   },
 
+  created() {
+    const guestSessionId = localStorage.getItem('guest_session_id')
+    const expiresAt = localStorage.getItem('expires_at')
+
+    if (guestSessionId && new Date(expiresAt) > new Date()) {
+    } else {
+      this.createNewSession()
+    }
+  },
+
   methods: {
+    createNewSession() {
+      this.$movie
+        .newSession()
+        .then((response) => {
+          const { guest_session_id, expires_at } = response.data
+          localStorage.setItem('guest_session_id', guest_session_id)
+          localStorage.setItem('expires_at', expires_at)
+          localStorage.setItem('account_id', 19803367)
+          this.creatSession()
+        })
+        .catch(() => {
+          this.$notifyError('Erro ao criar nova sessão')
+        })
+    },
+
     actionFavDrawer() {
       this.openFavDrawer = !this.openFavDrawer
       this.openCartDrawer = false
@@ -132,8 +157,8 @@ export default {
             }))
             this.displayedOptions = this.searchOptions.slice(0, 5) // Mostra apenas os primeiros 5 resultados
           })
-          .catch((error) => {
-            console.error(error)
+          .catch(() => {
+            this.$notifyError('Erro ao buscar filmes!')
           })
       } else {
         this.searchOptions = []
@@ -149,7 +174,7 @@ export default {
         setTimeout(() => {
           this.displayedOptions = this.searchOptions.slice(0, endIndex)
           this.isLoadingOptions = false
-        }, 500) // Simulação de uma carga assíncrona para carregar mais resultados. Ajuste conforme necessário.
+        }, 500)
       }
     }
   }
