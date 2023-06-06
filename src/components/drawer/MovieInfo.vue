@@ -23,7 +23,7 @@
 
     <!-- ICONE DE LIXEIRA -->
     <div class="movie-info--text-icon">
-      <q-btn flat round icon="delete" size="12px" />
+      <q-btn flat round icon="delete" size="12px" @click="removeItem" />
     </div>
   </div>
 </template>
@@ -88,6 +88,42 @@ export default {
     return {
       drawerRight: false
     }
+  },
+
+  methods: {
+    removeItem() {
+      if (!this.hasCart) {
+        this.removeFromCart()
+      } else {
+        this.removeFromFavorites()
+      }
+    },
+
+    removeFromCart() {
+      let cart = JSON.parse(localStorage.getItem('cart')) || []
+
+      const updatedCart = cart.map((item) => {
+        if (item.id === this.id) {
+          item.quantity--
+          if (item.quantity <= 0) {
+            return null // Remove completamente o filme
+          }
+        }
+        return item
+      })
+
+      const filteredCart = updatedCart.filter((item) => item !== null) // Remove os itens nulos
+
+      localStorage.setItem('cart', JSON.stringify(filteredCart))
+    },
+
+    removeFromFavorites() {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || []
+
+      const updatedFavorites = favorites.filter((favorite) => favorite.id !== this.id)
+
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites))
+    }
   }
 }
 </script>
@@ -117,8 +153,7 @@ export default {
 
     &-name {
       @extend .movie-info--text;
-      min-width: 95px;
-      max-width: 145px;
+      width: 145px;
       text-wrap: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;

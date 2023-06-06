@@ -92,21 +92,27 @@ export default {
   },
 
   methods: {
-    addToCart() {
-      let cart = JSON.parse(localStorage.getItem('cart')) || {}
+    createMovieObject(id, title, poster, genres) {
+      return {
+        id: id,
+        title: title,
+        poster: poster,
+        genres: genres,
+        quantity: 1
+      }
+    },
 
-      if (cart[this.id]) {
+    addToCart() {
+      let cart = JSON.parse(localStorage.getItem('cart')) || []
+
+      const movieExists = cart.find((movie) => movie.id === this.id)
+
+      if (movieExists) {
         // Se o filme já estiver no carrinho, incrementa a quantidade
-        cart[this.id].quantity++
+        movieExists.quantity++
       } else {
         // Se o filme ainda não estiver no carrinho, adiciona as informações
-        cart[this.id] = {
-          id: this.id,
-          title: this.title,
-          poster: this.poster,
-          genres: this.genres,
-          quantity: 1
-        }
+        cart.push(this.createMovieObject(this.id, this.title, this.poster, this.genres))
       }
 
       localStorage.setItem('cart', JSON.stringify(cart))

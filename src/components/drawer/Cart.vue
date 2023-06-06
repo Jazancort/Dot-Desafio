@@ -1,25 +1,26 @@
 <template>
   <q-drawer
-    side="right"
     v-model="drawerRight"
-    bordered
-    elevated
-    overlay
     :width="350"
     :min-width="500"
     :breakpoint="500"
+    side="right"
+    behavior="mobile"
     content-class="white"
+    bordered
+    elevated
+    overlay
   >
     <q-scroll-area class="fit">
       <div class="drawer">
         <div class="drawer-header">
           <span class="drawer-header--title">Meu Carrinho</span>
-          <span class="drawer-header--clear">Esvaziar</span>
+          <span class="drawer-header--clear" @click="clearCart">Esvaziar</span>
         </div>
       </div>
 
       <div class="drawer-content">
-        <div v-for="item in cartItems" :key="item.id">
+        <div v-for="item in cart" :key="item.id">
           <MovieInfo
             :poster="item.poster"
             :title="item.title"
@@ -35,9 +36,9 @@
 
       <div class="drawer-footer">
         <div class="row drawer-footer-total">
-          <div class="col-8 drawer-footer-total--text">Total:</div>
+          <div class="col-2 drawer-footer-total--text">Total:</div>
 
-          <div class="col drawer-footer-total--price">R$ {{ getTotalPrice }}</div>
+          <div class="col-9 drawer-footer-total--price">R$ {{ totalValue }}</div>
         </div>
 
         <q-btn
@@ -57,6 +58,7 @@
 
 <script>
 import MovieInfo from './MovieInfo'
+import { watchCartCount } from '../../utils/localStorage'
 
 export default {
   name: 'Cart',
@@ -74,27 +76,44 @@ export default {
 
   data() {
     return {
-      drawerRight: false
+      drawerRight: false,
+      cart: [],
+      totalValue: null
     }
   },
 
-  computed: {
-    cartItems() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || {}
-      return Object.values(cart)
-    },
-
-    getTotalPrice() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || {}
-      const totalItems = Object.values(cart).reduce((total, item) => total + item.quantity, 0)
-      const totalPrice = totalItems * 9.99
-      return totalPrice.toFixed(2)
-    }
+  created() {
+    watchCartCount(this.loadCart())
   },
 
   watch: {
     openCartDrawer() {
       this.drawerRight = !this.drawerRight
+      this.loadCart()
+    }
+  },
+
+  methods: {
+    loadCart() {
+      const cartData = localStorage.getItem('cart')
+      if (cartData) {
+        this.cart = JSON.parse(cartData)
+      } else {
+        this.cart = []
+      }
+
+      this.getTotalPrice()
+    },
+
+    getTotalPrice() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || []
+      const totalPrice = cart.reduce((total, item) => total + item.quantity * 9.99, 0)
+      this.totalValue = totalPrice.toFixed(2)
+    },
+
+    clearCart() {
+      localStorage.removeItem('cart')
+      this.cart = []
     }
   }
 }
@@ -134,7 +153,8 @@ export default {
       &--price {
         font-size: 26px;
         text-align: end;
-        padding-right: 6px;
+        margin-left: 10px;
+        text-wrap: nowrap;
       }
     }
 
@@ -151,6 +171,7 @@ export default {
   &-header {
     display: flex;
     margin-top: 40px;
+    margin-right: 8px;
 
     &--title {
       font-weight: 500;

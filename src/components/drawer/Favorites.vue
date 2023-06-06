@@ -1,20 +1,23 @@
 <template>
   <q-drawer
-    side="right"
     v-model="drawerRight"
-    bordered
-    elevated
-    overlay
     :width="350"
     :min-width="500"
     :breakpoint="500"
+    behavior="mobile"
+    side="right"
     content-class="white"
+    bordered
+    elevated
+    overlay
   >
     <q-scroll-area class="fit">
       <div class="drawer">
         <div class="drawer-header">
           <span class="drawer-header--title">Meus Favoritos</span>
-          <span class="drawer-header--clear" @click="clearFavorites">Esvaziar</span>
+          <span v-if="favorites.length > 0" class="drawer-header--clear" @click="clearFavorites">
+            Esvaziar
+          </span>
         </div>
       </div>
 
@@ -39,6 +42,7 @@
 </template>
 
 <script>
+import { watchFavoritesCount } from '../../utils/localStorage'
 import MovieInfo from './MovieInfo'
 
 export default {
@@ -60,6 +64,10 @@ export default {
       drawerRight: false,
       favorites: []
     }
+  },
+
+  created() {
+    watchFavoritesCount(this.loadFavorites)
   },
 
   watch: {

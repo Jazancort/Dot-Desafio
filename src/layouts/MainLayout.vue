@@ -71,7 +71,9 @@
             flat
             @click="actionCartDrawer()"
           >
-            <q-badge class="header--buttons-badge" rounded floating>4</q-badge>
+            <q-badge v-if="cartCount > 0" class="header--buttons-badge" rounded floating>{{
+              cartCount
+            }}</q-badge>
           </q-btn>
         </div>
       </q-toolbar>
@@ -89,7 +91,8 @@
 <script>
 import Favorites from '../components/drawer/Favorites.vue'
 import Cart from '../components/drawer/Cart.vue'
-import { watchFavoritesCount } from '../utils/localStorage'
+import { watchFavoritesCount, getFavoritesCount, getCartCount } from '../utils/localStorage'
+import { watchCartCount } from '../utils/localStorage'
 
 export default {
   name: 'MainLayout',
@@ -109,12 +112,18 @@ export default {
       isLoadingOptions: false,
       scrollOffset: 200,
       scrollThrottle: 300,
-      favoritesCount: null
+      favoritesCount: null,
+      cartCount: null
     }
   },
 
   created() {
+    this.favoritesCount = getFavoritesCount()
+
+    this.cartCount = getCartCount()
+
     watchFavoritesCount(this.handleFavoritesCountChange)
+    watchCartCount(this.handleCartCountChange)
 
     const guestSessionId = localStorage.getItem('guest_session_id')
     const expiresAt = localStorage.getItem('expires_at')
@@ -128,6 +137,10 @@ export default {
   methods: {
     handleFavoritesCountChange(count) {
       this.favoritesCount = count
+    },
+
+    handleCartCountChange(count) {
+      this.cartCount = count
     },
 
     createNewSession() {
