@@ -58,7 +58,9 @@
 
         <div class="header--buttons">
           <q-btn icon="favorite" size="16px" dense flat @click="actionFavDrawer()">
-            <q-badge class="header--buttons-badge" rounded floating>4</q-badge>
+            <q-badge v-if="favoritesCount > 0" class="header--buttons-badge" rounded floating>
+              {{ favoritesCount }}
+            </q-badge>
           </q-btn>
 
           <q-btn
@@ -87,6 +89,7 @@
 <script>
 import Favorites from '../components/drawer/Favorites.vue'
 import Cart from '../components/drawer/Cart.vue'
+import { watchFavoritesCount } from '../utils/localStorage'
 
 export default {
   name: 'MainLayout',
@@ -105,11 +108,14 @@ export default {
       displayedOptions: [],
       isLoadingOptions: false,
       scrollOffset: 200,
-      scrollThrottle: 300
+      scrollThrottle: 300,
+      favoritesCount: null
     }
   },
 
   created() {
+    watchFavoritesCount(this.handleFavoritesCountChange)
+
     const guestSessionId = localStorage.getItem('guest_session_id')
     const expiresAt = localStorage.getItem('expires_at')
 
@@ -120,6 +126,10 @@ export default {
   },
 
   methods: {
+    handleFavoritesCountChange(count) {
+      this.favoritesCount = count
+    },
+
     createNewSession() {
       this.$movie
         .newSession()

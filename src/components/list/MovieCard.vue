@@ -28,20 +28,22 @@
             <div class="gender">{{ genres }}</div>
           </div>
 
-          <div class="price">R$ 79,99</div>
+          <div class="price">R$ 9,99</div>
         </div>
       </q-card-section>
 
       <q-separator />
 
       <q-card-actions>
-        <q-btn class="movie-card--button full-width" no-caps>Adicionar</q-btn>
+        <q-btn class="movie-card--button full-width" no-caps @click="addToCart()">Adicionar</q-btn>
       </q-card-actions>
     </q-card>
   </div>
 </template>
 
 <script>
+import { watchFavoritesCount } from '../../utils/localStorage'
+
 export default {
   name: 'MovieCard',
 
@@ -85,25 +87,45 @@ export default {
 
   created() {
     this.checkFavoriteStatus()
+
+    watchFavoritesCount(this.checkFavoriteStatus)
   },
 
   methods: {
-    toggleFavorite() {
-      this.isFavorite = !this.isFavorite
+    addToCart() {
+      let cart = JSON.parse(localStorage.getItem('cart')) || {}
 
-      // Obtém os filmes favoritos do localStorage
-      let favorites = JSON.parse(localStorage.getItem('favorites')) || []
-
-      if (this.isFavorite) {
-        // Adiciona o filme aos favoritos
-        favorites.push({ id: this.id, title: this.title, poster: this.poster, genres: this.genres })
+      if (cart[this.id]) {
+        // Se o filme já estiver no carrinho, incrementa a quantidade
+        cart[this.id].quantity++
       } else {
-        // Remove o filme dos favoritos
-        favorites = favorites.filter((favorite) => favorite.id !== this.id)
+        // Se o filme ainda não estiver no carrinho, adiciona as informações
+        cart[this.id] = {
+          id: this.id,
+          title: this.title,
+          poster: this.poster,
+          genres: this.genres,
+          quantity: 1
+        }
       }
 
-      // Salva o array atualizado de favoritos no localStorage
-      localStorage.setItem('favorites', JSON.stringify(favorites))
+      localStorage.setItem('cart', JSON.stringify(cart))
+    },
+
+    toggleFavorite() {
+      if (this.isFavorite) {
+        // Remove o filme dos favoritos
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || []
+        favorites = favorites.filter((favorite) => favorite.id !== this.id)
+        localStorage.setItem('favorites', JSON.stringify(favorites))
+      } else {
+        // Adiciona o filme aos favoritos
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || []
+        favorites.push({ id: this.id, title: this.title, poster: this.poster, genres: this.genres })
+        localStorage.setItem('favorites', JSON.stringify(favorites))
+      }
+
+      this.isFavorite = !this.isFavorite
     },
 
     checkFavoriteStatus() {

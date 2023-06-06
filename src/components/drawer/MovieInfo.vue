@@ -1,16 +1,20 @@
 <template>
   <div :class="`movie-info__${gap}`" class="movie-info">
     <!-- IMAGEM DO FILME -->
-    <img src="exemplo.png" :height="imgHeight" class="header--logo-img" />
+    <img
+      :src="`https://image.tmdb.org/t/p/original${poster}`"
+      :height="imgHeight"
+      class="header--logo-img"
+    />
 
     <!-- NOME DO FILME -->
-    <div class="movie-info--text-name">Nome do filme</div>
+    <div class="movie-info--text-name">{{ title }}</div>
 
     <!-- QUANTIDADE DO FILME -->
-    <div class="movie-info--text">1</div>
+    <div v-if="!hasCart" class="movie-info--text">{{ quantity }}</div>
 
     <!-- PREÇO DO FILME -->
-    <div class="movie-info--text-price">R$200,00</div>
+    <div class="movie-info--text-price">R$9,99</div>
 
     <!-- ICONE DE CARRINHO -->
     <div v-if="hasCart" class="movie-info--text-icon">
@@ -42,6 +46,41 @@ export default {
     gap: {
       type: String,
       default: 'small'
+    },
+
+    title: {
+      type: String,
+      default: ''
+    },
+
+    date: {
+      type: String,
+      default: ''
+    },
+
+    poster: {
+      type: String,
+      default: ''
+    },
+
+    genres: {
+      type: String,
+      default: ''
+    },
+
+    votes: {
+      type: Number,
+      default: null
+    },
+
+    id: {
+      type: Number,
+      default: null
+    },
+
+    quantity: {
+      type: Number,
+      default: null
     }
   },
 
@@ -59,7 +98,7 @@ export default {
   margin-top: 15px;
 
   &__small {
-    gap: 12px;
+    gap: 16px;
   }
 
   &__medium {
@@ -79,6 +118,10 @@ export default {
     &-name {
       @extend .movie-info--text;
       min-width: 95px;
+      max-width: 145px;
+      text-wrap: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     &-icon {

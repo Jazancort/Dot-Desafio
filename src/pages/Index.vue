@@ -2,7 +2,6 @@
   <div class="movie-list" ref="movieList">
     <div v-for="movie in movies" :key="movie.id" class="movie-list--card">
       <MovieCard
-        :movies="movies"
         :poster="movie.poster_path"
         :title="movie.title"
         :date="movie.release_date"

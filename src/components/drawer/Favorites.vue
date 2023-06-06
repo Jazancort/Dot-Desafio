@@ -14,16 +14,27 @@
       <div class="drawer">
         <div class="drawer-header">
           <span class="drawer-header--title">Meus Favoritos</span>
-          <span class="drawer-header--clear">Esvaziar</span>
+          <span class="drawer-header--clear" @click="clearFavorites">Esvaziar</span>
         </div>
       </div>
 
       <div class="drawer-content">
-        <div v-for="index in 5" :key="index">
-          <MovieInfo :hasCart="true" />
+        <div v-for="movie in favorites" :key="movie.id">
+          <MovieInfo
+            :poster="movie.poster"
+            :title="movie.title"
+            :date="movie.release_date"
+            :votes="movie.vote_average"
+            :id="movie.id"
+            :hasCart="true"
+          />
         </div>
       </div>
     </q-scroll-area>
+
+    <div class="drawer-close" style="top: 5px; right: 10px">
+      <q-btn dense flat round icon="close" @click="drawerRight = !drawerRight" />
+    </div>
   </q-drawer>
 </template>
 
@@ -46,13 +57,31 @@ export default {
 
   data() {
     return {
-      drawerRight: false
+      drawerRight: false,
+      favorites: []
     }
   },
 
   watch: {
     openFavDrawer() {
       this.drawerRight = !this.drawerRight
+      this.loadFavorites()
+    }
+  },
+
+  methods: {
+    loadFavorites() {
+      const favoritesData = localStorage.getItem('favorites')
+      if (favoritesData) {
+        this.favorites = JSON.parse(favoritesData)
+      } else {
+        this.favorites = []
+      }
+    },
+
+    clearFavorites() {
+      localStorage.removeItem('favorites')
+      this.favorites = []
     }
   }
 }
@@ -62,12 +91,18 @@ export default {
 .drawer {
   margin: 14px 12px 20px 8px;
 
+  &-close {
+    position: absolute;
+    height: 10px;
+  }
+
   &-content {
     margin: 0 8px 0 8px;
   }
 
   &-header {
     display: flex;
+    margin-top: 40px;
 
     &--title {
       font-weight: 500;

@@ -13,14 +13,23 @@
     <q-scroll-area class="fit">
       <div class="drawer">
         <div class="drawer-header">
-          <span class="drawer-header--title">Meus Carrinho</span>
+          <span class="drawer-header--title">Meu Carrinho</span>
           <span class="drawer-header--clear">Esvaziar</span>
         </div>
       </div>
 
       <div class="drawer-content">
-        <div v-for="index in 5" :key="index">
-          <MovieInfo gap="medium" :hasCart="false" />
+        <div v-for="item in cartItems" :key="item.id">
+          <MovieInfo
+            :poster="item.poster"
+            :title="item.title"
+            :date="item.release_date"
+            :votes="item.vote_average"
+            :id="item.id"
+            :quantity="item.quantity"
+            :hasCart="false"
+            gap="medium"
+          />
         </div>
       </div>
 
@@ -28,7 +37,7 @@
         <div class="row drawer-footer-total">
           <div class="col-8 drawer-footer-total--text">Total:</div>
 
-          <div class="col drawer-footer-total--price">R$ 19,98</div>
+          <div class="col drawer-footer-total--price">R$ {{ getTotalPrice }}</div>
         </div>
 
         <q-btn
@@ -39,6 +48,10 @@
         />
       </div>
     </q-scroll-area>
+
+    <div class="drawer-close" style="top: 5px; right: 10px">
+      <q-btn dense flat round icon="close" @click="drawerRight = !drawerRight" />
+    </div>
   </q-drawer>
 </template>
 
@@ -65,6 +78,20 @@ export default {
     }
   },
 
+  computed: {
+    cartItems() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || {}
+      return Object.values(cart)
+    },
+
+    getTotalPrice() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || {}
+      const totalItems = Object.values(cart).reduce((total, item) => total + item.quantity, 0)
+      const totalPrice = totalItems * 9.99
+      return totalPrice.toFixed(2)
+    }
+  },
+
   watch: {
     openCartDrawer() {
       this.drawerRight = !this.drawerRight
@@ -76,6 +103,11 @@ export default {
 <style lang="scss" scoped>
 .drawer {
   margin: 14px 12px 20px 8px;
+
+  &-close {
+    position: absolute;
+    height: 10px;
+  }
 
   &-content {
     margin: 0 8px 0 8px;
@@ -118,6 +150,7 @@ export default {
 
   &-header {
     display: flex;
+    margin-top: 40px;
 
     &--title {
       font-weight: 500;
