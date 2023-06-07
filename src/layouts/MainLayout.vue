@@ -144,18 +144,13 @@ export default {
     },
 
     createNewSession() {
-      this.$movie
-        .newSession()
-        .then((response) => {
-          const { guest_session_id, expires_at } = response.data
-          localStorage.setItem('guest_session_id', guest_session_id)
-          localStorage.setItem('expires_at', expires_at)
-          localStorage.setItem('account_id', 19803367)
-          this.creatSession()
-        })
-        .catch(() => {
-          this.$notifyError('Erro ao criar nova sessão')
-        })
+      this.$movie.newSession().then((response) => {
+        const { guest_session_id, expires_at } = response.data
+        localStorage.setItem('guest_session_id', guest_session_id)
+        localStorage.setItem('expires_at', expires_at)
+        localStorage.setItem('account_id', 19803367)
+        this.creatSession()
+      })
     },
 
     closeCartModal() {
