@@ -1,15 +1,18 @@
 <template>
   <q-drawer
     v-model="drawerRight"
-    :width="350"
+    :width="365"
     :min-width="500"
     :breakpoint="500"
+    :no-swipe-backdrop="$q.platform.is.mobile ? false : true"
     side="right"
     behavior="mobile"
     content-class="white"
     bordered
     elevated
+    no-swipe-open
     overlay
+    @hide="closeCart"
   >
     <q-scroll-area class="fit">
       <div class="drawer">
@@ -42,6 +45,7 @@
         </div>
 
         <q-btn
+          :disable="cart.length <= 0"
           class="full-width drawer-footer-button"
           label="Finalizar"
           no-caps
@@ -51,7 +55,7 @@
     </q-scroll-area>
 
     <div class="drawer-close" style="top: 5px; right: 10px">
-      <q-btn dense flat round icon="close" @click="drawerRight = !drawerRight" />
+      <q-btn dense flat round icon="close" @click="closeCart" />
     </div>
   </q-drawer>
 </template>
@@ -83,17 +87,22 @@ export default {
   },
 
   created() {
-    watchCartCount(this.loadCart())
+    watchCartCount(this.loadCart)
   },
 
   watch: {
-    openCartDrawer() {
-      this.drawerRight = !this.drawerRight
+    openCartDrawer(newVal) {
+      this.drawerRight = newVal
       this.loadCart()
     }
   },
 
   methods: {
+    closeCart() {
+      this.drawerRight = false
+      this.$emit('closeCart')
+    },
+
     loadCart() {
       const cartData = localStorage.getItem('cart')
       if (cartData) {
@@ -114,6 +123,7 @@ export default {
     clearCart() {
       localStorage.removeItem('cart')
       this.cart = []
+      this.getTotalPrice()
     }
   }
 }

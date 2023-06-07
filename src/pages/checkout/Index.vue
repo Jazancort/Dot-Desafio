@@ -35,7 +35,6 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
   }
 
   &--item {
@@ -48,7 +47,7 @@ export default {
     &-movies {
       margin: 10px;
       margin-right: 50px;
-      min-width: 350px;
+      min-width: 500px;
     }
   }
 }
@@ -68,7 +67,7 @@ export default {
     }
 
     &-movies {
-      margin: 10px;
+      margin: 20px;
       min-width: auto;
       flex-basis: 100%;
     }

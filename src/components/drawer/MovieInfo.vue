@@ -8,10 +8,12 @@
     />
 
     <!-- NOME DO FILME -->
-    <div class="movie-info--text-name">{{ title }}</div>
+    <div :class="`movie-info--text-name__${nameSize}`" class="movie-info--text-name">
+      {{ title }}
+    </div>
 
     <!-- QUANTIDADE DO FILME -->
-    <div v-if="!hasCart" class="movie-info--text">{{ quantity }}</div>
+    <div v-if="!hasCart" class="movie-info--text-quantity">{{ quantity }}</div>
 
     <!-- PREÇO DO FILME -->
     <div class="movie-info--text-price">R$9,99</div>
@@ -44,6 +46,11 @@ export default {
     },
 
     gap: {
+      type: String,
+      default: 'small'
+    },
+
+    nameSize: {
       type: String,
       default: 'small'
     },
@@ -100,21 +107,11 @@ export default {
     },
 
     removeFromCart() {
-      let cart = JSON.parse(localStorage.getItem('cart')) || []
+      const cart = JSON.parse(localStorage.getItem('cart')) || []
 
-      const updatedCart = cart.map((item) => {
-        if (item.id === this.id) {
-          item.quantity--
-          if (item.quantity <= 0) {
-            return null // Remove completamente o filme
-          }
-        }
-        return item
-      })
+      const updatedCart = cart.filter((cart) => cart.id !== this.id)
 
-      const filteredCart = updatedCart.filter((item) => item !== null) // Remove os itens nulos
-
-      localStorage.setItem('cart', JSON.stringify(filteredCart))
+      localStorage.setItem('cart', JSON.stringify(updatedCart))
     },
 
     removeFromFavorites() {
@@ -134,7 +131,7 @@ export default {
   margin-top: 15px;
 
   &__small {
-    gap: 16px;
+    gap: 18px;
   }
 
   &__medium {
@@ -153,10 +150,26 @@ export default {
 
     &-name {
       @extend .movie-info--text;
-      width: 145px;
       text-wrap: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      &__small {
+        width: 145px;
+      }
+
+      &__medium {
+        width: 200px;
+      }
+
+      &__big {
+        width: 275px;
+      }
+    }
+
+    &-quantity {
+      @extend .movie-info--text;
+      width: 15px;
     }
 
     &-icon {

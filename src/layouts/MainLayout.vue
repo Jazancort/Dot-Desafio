@@ -57,7 +57,7 @@
         </div>
 
         <div class="header--buttons">
-          <q-btn icon="favorite" size="16px" dense flat @click="actionFavDrawer()">
+          <q-btn icon="favorite" size="16px" dense flat @click="openFavDrawer = true">
             <q-badge v-if="favoritesCount > 0" class="header--buttons-badge" rounded floating>
               {{ favoritesCount }}
             </q-badge>
@@ -69,7 +69,7 @@
             class="q-ml-md"
             dense
             flat
-            @click="actionCartDrawer()"
+            @click="openCartDrawer = true"
           >
             <q-badge v-if="cartCount > 0" class="header--buttons-badge" rounded floating>{{
               cartCount
@@ -79,8 +79,8 @@
       </q-toolbar>
     </q-header>
 
-    <Favorites :openFavDrawer="openFavDrawer" />
-    <Cart :openCartDrawer="openCartDrawer" />
+    <Favorites :openFavDrawer="openFavDrawer" @closeFav="closeFavModal" />
+    <Cart :openCartDrawer="openCartDrawer" @closeCart="closeCartModal" />
 
     <q-page-container>
       <router-view />
@@ -158,13 +158,11 @@ export default {
         })
     },
 
-    actionFavDrawer() {
-      this.openFavDrawer = !this.openFavDrawer
+    closeCartModal() {
       this.openCartDrawer = false
     },
 
-    actionCartDrawer() {
-      this.openCartDrawer = !this.openCartDrawer
+    closeFavModal() {
       this.openFavDrawer = false
     },
 

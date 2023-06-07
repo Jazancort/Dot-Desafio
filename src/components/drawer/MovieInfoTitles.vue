@@ -1,5 +1,5 @@
 <template>
-  <div class="movie-info-title">
+  <div :class="`movie-info-title__${gap}`" class="movie-info-title">
     <!-- IMAGEM DO FILME -->
     <div class="movie-info-title--text">Imagem</div>
 
@@ -10,7 +10,7 @@
     <div class="movie-info-title--text-qtd">Qtd</div>
 
     <!-- PREÇO DO FILME -->
-    <div class="movie-info-title--text">Preço</div>
+    <div class="movie-info-title--text-price">Preço</div>
   </div>
 </template>
 
@@ -18,8 +18,11 @@
 export default {
   name: 'MovieInfoTitles',
 
-  data() {
-    return {}
+  props: {
+    gap: {
+      type: String,
+      default: 'medium'
+    }
   }
 }
 </script>
@@ -29,6 +32,19 @@ export default {
   display: inline-flex;
   gap: 25px;
   margin-top: 40px;
+  margin-left: -5px;
+
+  &__small {
+    gap: 16px;
+  }
+
+  &__medium {
+    gap: 26px;
+  }
+
+  &__big {
+    gap: 45px;
+  }
 
   &--text {
     font-size: 16px;
@@ -38,7 +54,24 @@ export default {
 
     &-qtd {
       @extend .movie-info-title--text;
-      margin-left: 50px;
+      margin-left: 165px;
+    }
+
+    &-price {
+      @extend .movie-info-title--text;
+      margin-left: -15px;
+    }
+
+    @media (max-width: 600px) {
+      &-qtd {
+        @extend .movie-info-title--text;
+        margin-left: 50px;
+      }
+
+      &-price {
+        @extend .movie-info-title--text;
+        margin-left: -0;
+      }
     }
   }
 }

@@ -1,15 +1,18 @@
 <template>
   <q-drawer
     v-model="drawerRight"
-    :width="350"
+    :width="365"
     :min-width="500"
     :breakpoint="500"
+    :no-swipe-backdrop="$q.platform.is.mobile ? false : true"
     behavior="mobile"
     side="right"
     content-class="white"
     bordered
     elevated
+    no-swipe-open
     overlay
+    @hide="closeFav"
   >
     <q-scroll-area class="fit">
       <div class="drawer">
@@ -36,7 +39,7 @@
     </q-scroll-area>
 
     <div class="drawer-close" style="top: 5px; right: 10px">
-      <q-btn dense flat round icon="close" @click="drawerRight = !drawerRight" />
+      <q-btn dense flat round icon="close" @click="closeFav" />
     </div>
   </q-drawer>
 </template>
@@ -71,13 +74,18 @@ export default {
   },
 
   watch: {
-    openFavDrawer() {
-      this.drawerRight = !this.drawerRight
+    openFavDrawer(newVal) {
+      this.drawerRight = newVal
       this.loadFavorites()
     }
   },
 
   methods: {
+    closeFav() {
+      this.drawerRight = false
+      this.$emit('closeFav')
+    },
+
     loadFavorites() {
       const favoritesData = localStorage.getItem('favorites')
       if (favoritesData) {

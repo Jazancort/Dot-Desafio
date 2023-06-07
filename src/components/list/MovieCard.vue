@@ -15,7 +15,7 @@
       </div>
 
       <div class="movie-card--date">
-        <div class="movie-card--date-text">7 de Janeiro, 2019</div>
+        <div class="movie-card--date-text">{{ formattedDate }}</div>
       </div>
 
       <q-card-section>
@@ -43,6 +43,8 @@
 
 <script>
 import { watchFavoritesCount } from '../../utils/localStorage'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 export default {
   name: 'MovieCard',
@@ -82,6 +84,13 @@ export default {
   data() {
     return {
       isFavorite: false
+    }
+  },
+
+  computed: {
+    formattedDate() {
+      const data = new Date(this.date.replace(/-/g, '/'))
+      return format(data, "d 'de' MMMM, yyyy", { locale: ptBR })
     }
   },
 

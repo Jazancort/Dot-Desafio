@@ -1,25 +1,37 @@
 <template>
   <div class="selected-movies">
-    <MovieInfoTitles gap="big" />
+    <MovieInfoTitles :gap="!$q.platform.is.mobile ? 'big' : 'medium'" />
 
-    <div v-for="index in itemCount" :key="index">
-      <MovieInfo gap="big" />
-      <hr v-if="isLastItem(index) && hasLine" class="content--line" />
+    <div v-for="item in cart" :key="item.id">
+      <MovieInfo
+        :poster="item.poster"
+        :title="item.title"
+        :date="item.release_date"
+        :votes="item.vote_average"
+        :id="item.id"
+        :quantity="item.quantity"
+        :hasCart="false"
+        :gap="!$q.platform.is.mobile ? 'big' : 'small'"
+        :nameSize="!$q.platform.is.mobile ? 'big' : 'small'"
+      />
+      <hr class="content--line" />
     </div>
 
-    <div v-if="hasTotal" class="row total">
+    <div class="row total">
       <div class="col-8 total--text">Total:</div>
 
-      <div class="col total--price">R$ 19,98</div>
+      <div class="col total--price">R$ {{ totalValue }}</div>
     </div>
 
-    <q-btn v-if="hasButton" class="full-width button" no-caps label="Finalizar" />
+    <q-btn class="full-width button" no-caps label="Finalizar" />
   </div>
 </template>
 
 <script>
 import MovieInfo from '../drawer/MovieInfo.vue'
 import MovieInfoTitles from '../drawer/MovieInfoTitles.vue'
+import { watchCartCount } from '../../utils/localStorage'
+
 export default {
   name: 'SelectedMovies',
 
@@ -28,42 +40,47 @@ export default {
     MovieInfoTitles
   },
 
-  props: {
-    hasTitle: {
-      type: Boolean,
-      default: true
-    },
-
-    hasTotal: {
-      type: Boolean,
-      default: true
-    },
-
-    hasButton: {
-      type: Boolean,
-      default: true
-    },
-
-    hasLine: {
-      type: Boolean,
-      default: true
-    },
-
-    imgHeight: {
-      type: String,
-      default: '70px'
-    }
-  },
-
   data() {
     return {
-      itemCount: 2 // Defina o número de vezes que o v-for deve ocorrer dinamicamente
+      itemCount: 2,
+      cart: [],
+      totalValue: null
     }
   },
 
   computed: {
     isLastItem() {
-      return (index) => index === this.itemCount - 1
+      return (index) => index === this.cart.length - 1
+    }
+  },
+
+  created() {
+    this.loadCart()
+    watchCartCount(this.loadCart)
+  },
+
+  watch: {
+    totalValue() {
+      this.loadCart
+    }
+  },
+
+  methods: {
+    loadCart() {
+      const cartData = localStorage.getItem('cart')
+      if (cartData) {
+        this.cart = JSON.parse(cartData)
+      } else {
+        this.cart = []
+      }
+
+      this.getTotalPrice()
+    },
+
+    getTotalPrice() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || []
+      const totalPrice = cart.reduce((total, item) => total + item.quantity * 9.99, 0)
+      this.totalValue = totalPrice.toFixed(2)
     }
   }
 }
