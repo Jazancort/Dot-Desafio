@@ -18,7 +18,9 @@
       <div class="drawer">
         <div class="drawer-header">
           <span class="drawer-header--title">Meu Carrinho</span>
-          <span class="drawer-header--clear" @click="clearCart">Esvaziar</span>
+          <span v-if="cart.length > 0" class="drawer-header--clear" @click="clearCart"
+            >Esvaziar</span
+          >
         </div>
       </div>
 

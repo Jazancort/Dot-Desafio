@@ -23,13 +23,22 @@
       <div class="col total--price">R$ {{ totalValue }}</div>
     </div>
 
-    <q-btn class="full-width button" no-caps label="Finalizar" />
+    <q-btn
+      :disable="!isValidated || cart.length === 0"
+      class="full-width button"
+      label="Finalizar"
+      no-caps
+      @click="submit"
+    />
+
+    <FinalizationDialog :isOpen="dialog" />
   </div>
 </template>
 
 <script>
 import MovieInfo from '../drawer/MovieInfo.vue'
 import MovieInfoTitles from '../drawer/MovieInfoTitles.vue'
+import FinalizationDialog from './FinalizationDialog.vue'
 import { watchCartCount } from '../../utils/localStorage'
 
 export default {
@@ -37,14 +46,23 @@ export default {
 
   components: {
     MovieInfo,
-    MovieInfoTitles
+    MovieInfoTitles,
+    FinalizationDialog
+  },
+
+  props: {
+    isValidated: {
+      type: Boolean,
+      default: false
+    }
   },
 
   data() {
     return {
       itemCount: 2,
       cart: [],
-      totalValue: null
+      totalValue: null,
+      dialog: false
     }
   },
 
@@ -66,6 +84,10 @@ export default {
   },
 
   methods: {
+    submit() {
+      this.dialog = true
+    },
+
     loadCart() {
       const cartData = localStorage.getItem('cart')
       if (cartData) {

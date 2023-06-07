@@ -281,7 +281,7 @@ export default {
     }
 
     &--buttons {
-      margin-right: 15px;
+      margin-right: 5px;
       position: absolute;
       right: 0;
     }

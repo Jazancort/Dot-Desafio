@@ -2,10 +2,10 @@
   <div class="checkout">
     <div class="checkout--content">
       <div class="checkout--item-form">
-        <UserForm />
+        <UserForm @formValidated="getValidation" />
       </div>
       <div class="checkout--item-movies">
-        <SelectedMovies />
+        <SelectedMovies :isValidated="isValidated" />
       </div>
     </div>
   </div>
@@ -22,10 +22,16 @@ export default {
     SelectedMovies
   },
   data() {
-    return {}
+    return {
+      isValidated: false
+    }
   },
 
-  methods: {}
+  methods: {
+    getValidation(val) {
+      this.isValidated = val
+    }
+  }
 }
 </script>
 
