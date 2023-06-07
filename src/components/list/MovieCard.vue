@@ -1,8 +1,10 @@
 <template>
   <div id="movie-card">
     <q-card class="movie-card">
+      <!-- POSTER DO FILME -->
       <img :src="`https://image.tmdb.org/t/p/original${poster}`" class="movie-card--img" />
 
+      <!-- BOTÃO DE ADICIONAR AOS FAVORITOS -->
       <div class="row col-auto movie-card--favorite">
         <q-btn
           :color="isFavorite ? 'red-7' : 'grey-7'"
@@ -14,20 +16,26 @@
         ></q-btn>
       </div>
 
+      <!-- DATA DO FILME -->
       <div class="movie-card--date">
         <div class="movie-card--date-text">{{ formattedDate }}</div>
       </div>
 
       <q-card-section>
+        <!-- TITULO DO FILME -->
         <div class="movie-card--info">
           <div class="name">{{ title }}</div>
 
           <div class="gender">
+            <!-- NOTAS DO FILME -->
             <q-icon class="icon" size="sm" name="r_star" />
             <span class="icon--text">{{ votes }} </span>
+
+            <!-- GÊNEROS DO FILME -->
             <div class="gender">{{ genres }}</div>
           </div>
 
+          <!-- PREÇO DO FILME -->
           <div class="price">R$ 9,99</div>
         </div>
       </q-card-section>
@@ -35,6 +43,7 @@
       <q-separator />
 
       <q-card-actions>
+        <!-- BOTÃO DE ADICIONAR AO CARRINHO -->
         <q-btn class="movie-card--button full-width" no-caps @click="addToCart()">Adicionar</q-btn>
       </q-card-actions>
     </q-card>
@@ -50,31 +59,37 @@ export default {
   name: 'MovieCard',
 
   props: {
+    /* Título do filme */
     title: {
       type: String,
       default: ''
     },
 
+    /* Data de lançamento do filme */
     date: {
       type: String,
       default: ''
     },
 
+    /* URL do pôster do filme */
     poster: {
       type: String,
       default: ''
     },
 
+    /* Gêneros do filme */
     genres: {
       type: String,
       default: ''
     },
 
+    /* Total de votos recebidos pelo filme */
     votes: {
       type: Number,
       default: null
     },
 
+    /* ID do filme */
     id: {
       type: Number,
       default: null
@@ -83,11 +98,13 @@ export default {
 
   data() {
     return {
+      /* Controla se o filme foi adicionado aos favoritos */
       isFavorite: false
     }
   },
 
   computed: {
+    /* Retorna a data formatada no formato "d 'de' MMMM, yyyy" */
     formattedDate() {
       const data = new Date(this.date.replace(/-/g, '/'))
       return format(data, "d 'de' MMMM, yyyy", { locale: ptBR })
@@ -95,12 +112,15 @@ export default {
   },
 
   created() {
+    /* Verifica o status de favorito */
     this.checkFavoriteStatus()
 
+    /* Observa a mudança na contagem de favoritos e chama a função checkFavoriteStatus */
     watchFavoritesCount(this.checkFavoriteStatus)
   },
 
   methods: {
+    /* Cria um objeto de filme com as informações fornecidas */
     createMovieObject(id, title, poster, genres) {
       return {
         id: id,
@@ -111,30 +131,32 @@ export default {
       }
     },
 
+    /* Adiciona o filme ao carrinho */
     addToCart() {
       let cart = JSON.parse(localStorage.getItem('cart')) || []
 
       const movieExists = cart.find((movie) => movie.id === this.id)
 
       if (movieExists) {
-        // Se o filme já estiver no carrinho, incrementa a quantidade
+        /* Se o filme já estiver no carrinho, incrementa a quantidade */
         movieExists.quantity++
       } else {
-        // Se o filme ainda não estiver no carrinho, adiciona as informações
+        /* Se o filme ainda não estiver no carrinho, adiciona as informações */
         cart.push(this.createMovieObject(this.id, this.title, this.poster, this.genres))
       }
 
       localStorage.setItem('cart', JSON.stringify(cart))
     },
 
+    /* Alterna o status de favorito */
     toggleFavorite() {
       if (this.isFavorite) {
-        // Remove o filme dos favoritos
+        /* Remove o filme dos favoritos */
         let favorites = JSON.parse(localStorage.getItem('favorites')) || []
         favorites = favorites.filter((favorite) => favorite.id !== this.id)
         localStorage.setItem('favorites', JSON.stringify(favorites))
       } else {
-        // Adiciona o filme aos favoritos
+        /* Adiciona o filme aos favoritos */
         let favorites = JSON.parse(localStorage.getItem('favorites')) || []
         favorites.push({ id: this.id, title: this.title, poster: this.poster, genres: this.genres })
         localStorage.setItem('favorites', JSON.stringify(favorites))
@@ -143,6 +165,7 @@ export default {
       this.isFavorite = !this.isFavorite
     },
 
+    /* Verifica o status de favorito */
     checkFavoriteStatus() {
       let favorites = JSON.parse(localStorage.getItem('favorites')) || []
       this.isFavorite = favorites.some((favorite) => favorite.id === this.id)

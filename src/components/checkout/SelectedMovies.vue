@@ -1,8 +1,10 @@
 <template>
   <div class="selected-movies">
+    <!-- TITULOS DOS ITENS -->
     <MovieInfoTitles :gap="!$q.platform.is.mobile ? 'big' : 'medium'" />
 
     <div v-for="item in cart" :key="item.id">
+      <!-- INFORMAÇÕES DOS FILMES NO CARRINHO -->
       <MovieInfo
         :poster="item.poster"
         :title="item.title"
@@ -14,15 +16,18 @@
         :gap="!$q.platform.is.mobile ? 'big' : 'small'"
         :nameSize="!$q.platform.is.mobile ? 'big' : 'small'"
       />
+      <!-- LINHA DE SEPARAÇÃO -->
       <hr class="content--line" />
     </div>
 
+    <!-- TOTAL DE ITENS NO CARRINHO -->
     <div class="row total">
       <div class="col-8 total--text">Total:</div>
 
       <div class="col total--price">R$ {{ totalValue }}</div>
     </div>
 
+    <!-- BOTÃO DE FINALIZAR COMPRA -->
     <q-btn
       :disable="!isValidated || cart.length === 0"
       class="full-width button"
@@ -31,6 +36,7 @@
       @click="submit"
     />
 
+    <!-- DIALOG DE AGRADECIMENTO PELA COMPRA -->
     <FinalizationDialog :isOpen="dialog" />
   </div>
 </template>
@@ -51,6 +57,7 @@ export default {
   },
 
   props: {
+    /* Indica se o formulário foi validado com sucesso */
     isValidated: {
       type: Boolean,
       default: false
@@ -59,49 +66,64 @@ export default {
 
   data() {
     return {
-      itemCount: 2,
+      /* Array contendo os itens do carrinho */
       cart: [],
+
+      /* Valor total do carrinho */
       totalValue: null,
+
+      /* Flag para controlar a exibição do diálogo */
       dialog: false
     }
   },
 
-  computed: {
-    isLastItem() {
-      return (index) => index === this.cart.length - 1
-    }
-  },
-
   created() {
+    /* Carrega os dados do carrinho ao iniciar o componente */
     this.loadCart()
+
+    /* Observa alterações na contagem do carrinho e carrega os dados novamente */
     watchCartCount(this.loadCart)
   },
 
   watch: {
+    /* Observa as alterações no valor total do carrinho */
     totalValue() {
+      /* Carrega os dados do carrinho */
       this.loadCart
     }
   },
 
   methods: {
+    /* Função para enviar o formulário */
     submit() {
       this.dialog = true
     },
 
+    /* Função para carregar os dados do carrinho */
     loadCart() {
+      /* Obtém os dados do carrinho do localStorage */
       const cartData = localStorage.getItem('cart')
       if (cartData) {
+        /* Converte os dados do carrinho de volta para um objeto */
         this.cart = JSON.parse(cartData)
       } else {
+        /* Define o carrinho como vazio caso não haja dados no localStorage */
         this.cart = []
       }
 
+      /* Calcula o preço total do carrinho */
       this.getTotalPrice()
     },
 
+    /* Função para calcular o preço total do carrinho */
     getTotalPrice() {
+      /* Obtém os dados do carrinho do localStorage */
       const cart = JSON.parse(localStorage.getItem('cart')) || []
+
+      /* Calcula o preço total somando o preço de cada item no carrinho */
       const totalPrice = cart.reduce((total, item) => total + item.quantity * 9.99, 0)
+
+      /* Arredonda o preço total para duas casas decimais e atualiza a propriedade totalValue */
       this.totalValue = totalPrice.toFixed(2)
     }
   }

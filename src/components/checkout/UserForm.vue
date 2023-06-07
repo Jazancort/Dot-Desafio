@@ -127,24 +127,34 @@ export default {
   name: 'UserForm',
   data() {
     return {
+      /* Nome do usuário */
       nome: null,
+      /* CPF do usuário */
       cpf: '',
+      /* Número de celular do usuário */
       celular: '',
+      /* Email do usuário */
       email: null,
+      /* CEP do endereço do usuário */
       cep: null,
+      /* Endereço do usuário */
       endereco: null,
+      /* Cidade do usuário */
       cidade: null,
+      /* Estado do usuário */
       estado: null
     }
   },
 
   computed: {
     phoneMask() {
+      /* Retorna a máscara de telefone com base no comprimento do número de celular */
       return this.celular.length > 10 ? '(##) #####-####' : '(##) ####-#####'
     }
   },
 
   methods: {
+    /* Valida o formulário e emite um evento com o resultado da validação */
     validateForm() {
       this.$refs.myForm.validate().then((success) => {
         if (success) {

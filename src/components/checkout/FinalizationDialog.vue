@@ -1,15 +1,19 @@
 <template>
+  <!-- DIALOG DE AGRADECIMENTO -->
   <q-dialog :value="isOpen" persistent>
     <q-card class="dialog-card" style="width: 400px">
       <q-card-section align="center" class="dialog-card--content">
+        <!-- AGRADECIMENTO COM O NOME DO USUÁRIO -->
         <div class="dialog-card--title">Obrigado {{ userName }}!</div>
       </q-card-section>
 
       <q-card-section align="center" class="dialog-card--content">
+        <!-- TEXTO DE AGRADECIMENTO -->
         <div class="dialog-card--subtitle">Sua compra foi finalizada com sucesso!</div>
       </q-card-section>
 
       <q-card-actions align="center" class="dialog-card--content">
+        <!-- BOTÃO DE IR PARA PÁGINA PRINCIPAL -->
         <q-btn class="dialog-card--button full-width" no-caps flat @click="closeDialog">
           Ir para loja
         </q-btn>
@@ -23,6 +27,7 @@ export default {
   name: 'FinalizationDialog',
 
   props: {
+    /* Propriedade que indica se o componente está aberto ou fechado */
     isOpen: {
       type: Boolean,
       default: false
@@ -31,21 +36,29 @@ export default {
 
   data() {
     return {
+      /* Nome do usuário */
       userName: null
     }
   },
 
   created() {
+    /* Verifica se há um nome completo armazenado no localStorage */
     const nomeCompleto = localStorage.getItem('userName')
     if (nomeCompleto) {
+      /* Divide o nome completo em uma lista de nomes separados */
       const nomesSeparados = nomeCompleto.split(' ')
+      /* Pega os dois primeiros nomes e junta novamente com um espaço entre eles */
       this.userName = nomesSeparados.slice(0, 2).join(' ')
     }
   },
 
   methods: {
+    /* Função para fechar o diálogo */
     closeDialog() {
+      /* Redireciona para a rota inicial */
       this.$router.push('/')
+
+      /* Remove o carrinho do localStorage */
       localStorage.removeItem('cart')
     }
   }

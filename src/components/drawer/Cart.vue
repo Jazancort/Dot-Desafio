@@ -1,4 +1,5 @@
 <template>
+  <!-- DRAWER DOS CARRINHOS -->
   <q-drawer
     v-model="drawerRight"
     :width="365"
@@ -17,7 +18,10 @@
     <q-scroll-area class="fit">
       <div class="drawer">
         <div class="drawer-header">
+          <!-- TITULO DO DRAWER -->
           <span class="drawer-header--title">Meu Carrinho</span>
+
+          <!-- LIMPA OS ITENS DO CARRINHO -->
           <span v-if="cart.length > 0" class="drawer-header--clear" @click="clearCart"
             >Esvaziar</span
           >
@@ -26,6 +30,7 @@
 
       <div class="drawer-content">
         <div v-for="item in cart" :key="item.id">
+          <!-- CARDS DOS FILMES -->
           <MovieInfo
             :poster="item.poster"
             :title="item.title"
@@ -40,12 +45,14 @@
       </div>
 
       <div class="drawer-footer">
+        <!-- TOTAL DOS ITENS NO CARRINHO -->
         <div class="row drawer-footer-total">
           <div class="col-2 drawer-footer-total--text">Total:</div>
 
           <div class="col-9 drawer-footer-total--price">R$ {{ totalValue }}</div>
         </div>
 
+        <!-- BOTÃO DE IR PARA CHECKOUT -->
         <q-btn
           :disable="cart.length <= 0"
           class="full-width drawer-footer-button"
@@ -56,6 +63,7 @@
       </div>
     </q-scroll-area>
 
+    <!-- BOTÃO DE FECHAR O DRAWER -->
     <div class="drawer-close" style="top: 5px; right: 10px">
       <q-btn dense flat round icon="close" @click="closeCart" />
     </div>
@@ -74,6 +82,7 @@ export default {
   },
 
   props: {
+    /* Indica se o drawer do carrinho está aberto */
     openCartDrawer: {
       type: Boolean,
       default: false
@@ -82,49 +91,76 @@ export default {
 
   data() {
     return {
+      /* Controla o estado de exibição do drawer */
       drawerRight: false,
+
+      /* Itens do carrinho */
       cart: [],
+
+      /* Valor total dos itens do carrinho */
       totalValue: null
     }
   },
 
   created() {
+    /* Observa a contagem do carrinho e chama a função loadCart */
     watchCartCount(this.loadCart)
   },
 
   watch: {
+    /* Observa a propriedade openCartDrawer e executa ações quando o valor mudar */
     openCartDrawer(newVal) {
       this.drawerRight = newVal
+
+      /* Chama a função loadCart */
       this.loadCart()
     }
   },
 
   methods: {
+    /* Fecha o drawer do carrinho */
     closeCart() {
       this.drawerRight = false
       this.$emit('closeCart')
     },
 
+    /* Carrega os dados do carrinho do armazenamento local */
     loadCart() {
+      /* Obtém os dados do carrinho do armazenamento local */
       const cartData = localStorage.getItem('cart')
       if (cartData) {
+        /* Converte os dados do carrinho para o formato adequado */
         this.cart = JSON.parse(cartData)
       } else {
+        /* Caso não haja dados do carrinho, define como uma lista vazia */
         this.cart = []
       }
 
+      /* Chama a função para obter o preço total do carrinho */
       this.getTotalPrice()
     },
 
+    /* Calcula o preço total do carrinho */
     getTotalPrice() {
+      /* Obtém os dados do carrinho do armazenamento local */
       const cart = JSON.parse(localStorage.getItem('cart')) || []
+
+      /* Calcula o preço total somando o preço de cada item */
       const totalPrice = cart.reduce((total, item) => total + item.quantity * 9.99, 0)
+
+      /* Arredonda o preço total para duas casas decimais */
       this.totalValue = totalPrice.toFixed(2)
     },
 
+    /* Limpa o carrinho */
     clearCart() {
+      /* Remove os dados do carrinho do armazenamento local */
       localStorage.removeItem('cart')
+
+      /* Limpa a lista de itens do carrinho */
       this.cart = []
+
+      /* Chama a função para obter o preço total do carrinho */
       this.getTotalPrice()
     }
   }

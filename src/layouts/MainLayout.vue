@@ -1,6 +1,6 @@
 <template>
   <q-layout class="shadow-2" view="lHh Lpr lFf">
-    <!-- Header da aplicação -->
+    <!-- HEADER DA APLICAÇÃO -->
     <q-header class="header">
       <q-toolbar class="header--content">
         <!-- IMAGEM DA LOGO -->
@@ -9,6 +9,7 @@
           <img v-else src="dot+.png" class="header--logo-img" />
         </div>
 
+        <!-- INPUT DE PESQUISA COM MENU DE RESULTADOS -->
         <div class="header--input">
           <q-input
             ref="searchInput"
@@ -56,6 +57,7 @@
           </q-input>
         </div>
 
+        <!-- BOTÃO DE DRAWER DE FAVORITOS -->
         <div class="header--buttons">
           <q-btn icon="favorite" size="16px" dense flat @click="openFavDrawer = true">
             <q-badge v-if="favoritesCount > 0" class="header--buttons-badge" rounded floating>
@@ -63,6 +65,7 @@
             </q-badge>
           </q-btn>
 
+          <!-- BOTÃO DE DRAWER DO CARRINHO -->
           <q-btn
             icon="shopping_cart"
             size="14px"
@@ -79,7 +82,10 @@
       </q-toolbar>
     </q-header>
 
+    <!-- DRAWER DE FAVORITOS -->
     <Favorites :openFavDrawer="openFavDrawer" @closeFav="closeFavModal" />
+
+    <!-- DRAWER DO CARRINHO -->
     <Cart :openCartDrawer="openCartDrawer" @closeCart="closeCartModal" />
 
     <q-page-container>
@@ -103,46 +109,82 @@ export default {
 
   data() {
     return {
+      /* Valor do input de pesquisa */
       text: null,
+
+      /* Controla o estado de exibição do Drawer de favoritos */
       openFavDrawer: false,
+
+      /* Controla o estado de exibição do Drawer do carrinho */
       openCartDrawer: false,
+
+      /* Mostra as opções da pesquisa */
       showOptions: false,
+
+      /* Opções do resultado da pesquisa */
       searchOptions: [],
+
+      /* Opções do resultado da pesquisa que vão ser mostrados */
       displayedOptions: [],
+
+      /* Se deve carregar novas opções */
       isLoadingOptions: false,
+
+      /* Controle do Scroll */
       scrollOffset: 200,
       scrollThrottle: 300,
+
+      /* Contagem de itens favoritos */
       favoritesCount: null,
+
+      /* Contagem de itens no carrinho */
       cartCount: null
     }
   },
 
   created() {
+    /* Obtém a contagem de favoritos */
     this.favoritesCount = getFavoritesCount()
 
+    /* Obtém a contagem do carrinho */
     this.cartCount = getCartCount()
 
+    /* Observa a mudança na contagem de favoritos */
     watchFavoritesCount(this.handleFavoritesCountChange)
+
+    /* Observa a mudança na contagem do carrinho */
     watchCartCount(this.handleCartCountChange)
 
+    /* Obtém o ID da sessão do convidado armazenado localmente */
     const guestSessionId = localStorage.getItem('guest_session_id')
+
+    /* Obtém o horário de expiração armazenado localmente */
     const expiresAt = localStorage.getItem('expires_at')
 
+    /* Verifica se o ID da sessão do convidado existe e se o horário de expiração é posterior ao horário atual */
     if (guestSessionId && new Date(expiresAt) > new Date()) {
     } else {
+      /* Cria uma nova sessão */
       this.createNewSession()
     }
   },
 
   methods: {
+    /** Atualiza a contagem de favoritos com o valor recebido
+     * @param {Number} count - Contagem de favoritos
+     */
     handleFavoritesCountChange(count) {
       this.favoritesCount = count
     },
 
+    /** Atualiza a contagem do carrinho com o valor recebido
+     * @param {Number} count - Contagem de itens no carrinho
+     */
     handleCartCountChange(count) {
       this.cartCount = count
     },
 
+    /* Cria uma nova sessão */
     createNewSession() {
       this.$movie.newSession().then((response) => {
         const { guest_session_id, expires_at } = response.data
@@ -153,14 +195,17 @@ export default {
       })
     },
 
+    /* Fecha o modal do carrinho */
     closeCartModal() {
       this.openCartDrawer = false
     },
 
+    /* Fecha o modal de favoritos */
     closeFavModal() {
       this.openFavDrawer = false
     },
 
+    /* Realiza a pesquisa dos filmes */
     handleSearchInput() {
       if (this.text) {
         this.$movie
@@ -171,7 +216,7 @@ export default {
               title: movie.title,
               poster: `https://image.tmdb.org/t/p/original${movie.poster_path}`
             }))
-            this.displayedOptions = this.searchOptions.slice(0, 5) // Mostra apenas os primeiros 5 resultados
+            this.displayedOptions = this.searchOptions.slice(0, 5)
           })
           .catch(() => {
             this.$notifyError('Erro ao buscar filmes!')
@@ -182,6 +227,7 @@ export default {
       }
     },
 
+    /* Carrega mais opções para exibir */
     loadMoreOptions() {
       const startIndex = this.displayedOptions.length
       const endIndex = startIndex + 5

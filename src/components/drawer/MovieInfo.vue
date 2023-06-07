@@ -35,69 +35,75 @@ export default {
   name: 'MovieInfo',
 
   props: {
+    /* Indica se o componente possui carrinho */
     hasCart: {
       type: Boolean,
       default: false
     },
 
+    /* Altura da imagem */
     imgHeight: {
       type: String,
       default: '50px'
     },
 
+    /* Espaçamento entre os elementos */
     gap: {
       type: String,
       default: 'small'
     },
 
+    /* Tamanho do nome */
     nameSize: {
       type: String,
       default: 'small'
     },
 
+    /* Título do filme */
     title: {
       type: String,
       default: ''
     },
 
+    /* Data do filme */
     date: {
       type: String,
       default: ''
     },
 
+    /* URL do pôster do filme */
     poster: {
       type: String,
       default: ''
     },
 
+    /* Gêneros do filme */
     genres: {
       type: String,
       default: ''
     },
 
+    /* Quantidade de votos do filme */
     votes: {
       type: Number,
       default: null
     },
 
+    /* ID do filme */
     id: {
       type: Number,
       default: null
     },
 
+    /* Quantidade de itens */
     quantity: {
       type: Number,
       default: null
     }
   },
 
-  data() {
-    return {
-      drawerRight: false
-    }
-  },
-
   methods: {
+    /* Adiciona o filme ao carrinho */
     addToCart() {
       const movie = {
         id: this.id,
@@ -108,23 +114,24 @@ export default {
 
       let cart = JSON.parse(localStorage.getItem('cart')) || []
 
-      // Verifica se o filme já está no carrinho
+      /*  Verifica se o filme já está no carrinho */
       const movieIndex = cart.findIndex((item) => item.id === movie.id)
 
       if (movieIndex !== -1) {
-        // Remove o filme do carrinho caso já exista
+        /* Remove o filme do carrinho caso já exista */
         cart.splice(movieIndex, 1)
       } else {
-        // Adiciona o filme ao carrinho caso não exista
+        /* Adiciona o filme ao carrinho caso não exista */
         cart.push(movie)
       }
 
       this.removeFromFavorites()
 
-      // Salva o carrinho atualizado no localStorage
+      /* Salva o carrinho atualizado no localStorage */
       localStorage.setItem('cart', JSON.stringify(cart))
     },
 
+    /* Remove um item */
     removeItem() {
       if (!this.hasCart) {
         this.removeFromCart()
@@ -133,6 +140,7 @@ export default {
       }
     },
 
+    /* Remove o item do carrinho */
     removeFromCart() {
       const cart = JSON.parse(localStorage.getItem('cart')) || []
 
@@ -141,6 +149,7 @@ export default {
       localStorage.setItem('cart', JSON.stringify(updatedCart))
     },
 
+    /* Remove o item dos favoritos */
     removeFromFavorites() {
       const favorites = JSON.parse(localStorage.getItem('favorites')) || []
 

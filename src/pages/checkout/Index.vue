@@ -2,9 +2,11 @@
   <div class="checkout">
     <div class="checkout--content">
       <div class="checkout--item-form">
+        <!-- FORMULÁRIO DE DADOS DO USUÁRIO -->
         <UserForm @formValidated="getValidation" />
       </div>
       <div class="checkout--item-movies">
+        <!-- FILMES ADICIONADOS AO CARRINHO -->
         <SelectedMovies :isValidated="isValidated" />
       </div>
     </div>
@@ -21,13 +23,18 @@ export default {
     UserForm,
     SelectedMovies
   },
+
   data() {
     return {
+      /* Verifica se o formulário foi validado */
       isValidated: false
     }
   },
 
   methods: {
+    /** Define o estado de validação.
+  @param {Boolean} val - O valor de validação.
+  */
     getValidation(val) {
       this.isValidated = val
     }

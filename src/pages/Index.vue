@@ -1,6 +1,7 @@
 <template>
   <div class="movie-list" ref="movieList">
     <div v-for="movie in movies" :key="movie.id" class="movie-list--card">
+      <!-- CARDS DOS FILMES -->
       <MovieCard
         :poster="movie.poster_path"
         :title="movie.title"
@@ -25,17 +26,31 @@ export default {
 
   data() {
     return {
+      /* Filmes Carregados */
       movies: [],
+
+      /* Gêneros dos filmes */
       genres: [],
+
+      /* Página atual */
       currentPage: 1,
+
+      /* Loading de carregamento */
       loading: false,
-      offset: 200 // Define o offset desejado, em pixels
+
+      /* Offset do scroll */
+      offset: 200
     }
   },
 
   created() {
+    /* Chamada dos filmes */
     this.fetchMovies()
+
+    /* Chamada dos Gêneros */
     this.fetchGenres()
+
+    /* Verificação do scroll para chamar outros filmes */
     window.addEventListener('scroll', this.handleScroll)
   },
 
@@ -44,9 +59,10 @@ export default {
   },
 
   methods: {
+    /* Busca filmes por página */
     fetchMovies() {
       this.$movie
-        .getPopularMovies({ page: this.currentPage })
+        .getMovies({ page: this.currentPage })
         .then((response) => {
           this.movies = this.movies.concat(response.data.results)
           this.loading = false
@@ -56,6 +72,7 @@ export default {
         })
     },
 
+    /* Busca gêneros de filmes */
     fetchGenres() {
       this.$movie
         .getMovieGenres()
@@ -67,12 +84,14 @@ export default {
         })
     },
 
+    /* Obtém o gênero do filme com base nos IDs */
     getMovieGenre(genreIds) {
       const movieGenres = this.genres.filter((genre) => genreIds.includes(genre.id)).slice(0, 4)
 
       return movieGenres.map((genre) => genre.name).join(', ')
     },
 
+    /* Manipula o evento de rolagem da página */
     handleScroll() {
       const movieList = this.$refs.movieList
       const scrollPosition = window.pageYOffset + window.innerHeight

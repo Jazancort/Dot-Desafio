@@ -19,6 +19,7 @@ export default {
   name: 'MovieInfoTitles',
 
   props: {
+    /* Espaçamento entre os elementos */
     gap: {
       type: String,
       default: 'medium'

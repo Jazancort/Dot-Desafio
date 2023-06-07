@@ -2,7 +2,7 @@ const account_id = localStorage.getItem('account_id')
 const session_id = localStorage.getItem('guest_session_id')
 
 export default ($axios) => ({
-  getPopularMovies: (params) => $axios.get(`/discover/movie?page`, { params }),
+  getMovies: (params) => $axios.get(`/discover/movie?page`, { params }),
 
   getMovieGenres: () => $axios.get('/genre/movie/list'),
 
