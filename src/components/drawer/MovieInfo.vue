@@ -20,7 +20,7 @@
 
     <!-- ICONE DE CARRINHO -->
     <div v-if="hasCart" class="movie-info--text-icon">
-      <q-btn flat round color="teal-5" icon="shopping_cart" size="12px" />
+      <q-btn flat round color="teal-5" icon="shopping_cart" size="12px" @click="addToCart" />
     </div>
 
     <!-- ICONE DE LIXEIRA -->
@@ -98,6 +98,33 @@ export default {
   },
 
   methods: {
+    addToCart() {
+      const movie = {
+        id: this.id,
+        title: this.title,
+        quantity: 1,
+        poster: this.poster
+      }
+
+      let cart = JSON.parse(localStorage.getItem('cart')) || []
+
+      // Verifica se o filme já está no carrinho
+      const movieIndex = cart.findIndex((item) => item.id === movie.id)
+
+      if (movieIndex !== -1) {
+        // Remove o filme do carrinho caso já exista
+        cart.splice(movieIndex, 1)
+      } else {
+        // Adiciona o filme ao carrinho caso não exista
+        cart.push(movie)
+      }
+
+      this.removeFromFavorites()
+
+      // Salva o carrinho atualizado no localStorage
+      localStorage.setItem('cart', JSON.stringify(cart))
+    },
+
     removeItem() {
       if (!this.hasCart) {
         this.removeFromCart()
