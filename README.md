@@ -1,31 +1,25 @@
 # Dot+ (desafio-dot)
 
-A Quasar Project
+Desafio para vaga de desenvolvedor pleno da Dot, desenvolvido em Vue.js com Quasar.
 
-## Install the dependencies
+O projeto foi criado usando este [manual](https://docs.google.com/document/d/1wWpOWGemXg8RQeHmSnCntfZarL1mPnIsopq-djO6oZo/edit) e com o modelo disponível no [whimsical](https://whimsical.com/prototipo-prova-dot-front-end-pleno-7bF8gFqUvTpoENiGgUXkyw)
+
+## Instalar as dependências do projeto
+
 ```bash
 yarn
 # or
 npm install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### Iniciar projeto em modo de desenvolvedor
+
 ```bash
 quasar dev
 ```
 
-
-### Lint the files
-```bash
-yarn lint
-# or
-npm run lint
-```
-
 ### Build the app for production
+
 ```bash
 quasar build
 ```
-
-### Customize the configuration
-See [Configuring quasar.conf.js](https://v1.quasar.dev/quasar-cli/quasar-conf-js).
